@@ -13,26 +13,33 @@ class MyBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: MyApp.customColor,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(width: 0.25, color: Colors.white),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.logout),
-          label: 'Updates',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.more_horiz_outlined),
-          label: 'More',
-        ),
-      ],
-      currentIndex: selectedIndex,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.white, 
-      onTap: onItemTapped,
+      ),
+      child: BottomNavigationBar(
+        backgroundColor: MyApp.customColor,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Updates',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz_outlined),
+            label: 'More',
+          ),
+        ],
+        currentIndex: selectedIndex,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        onTap: onItemTapped,
+      ),
     );
   }
 }
