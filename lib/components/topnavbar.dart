@@ -52,9 +52,9 @@ class _TopNavBarState extends State<TopNavBar> {
             SizedBox(width: 8),
             Spacer(),
             SizedBox(
-              height: 30, // Adjust vertical margin as needed
+              height: 30,
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 0), // Adjust horizontal margin as needed
+                margin: EdgeInsets.symmetric(vertical: 0), 
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white,
@@ -68,8 +68,8 @@ class _TopNavBarState extends State<TopNavBar> {
                     value: dropdownValue,
                     icon: null,
                     iconSize: 0,
-                    dropdownColor: MyApp.customColor, // Background color of the dropdown
-                    style: TextStyle(color: Colors.white), // Text color of dropdown items
+                    dropdownColor: MyApp.customColor,
+                    style: TextStyle(color: Colors.white),
                     items: items.map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
