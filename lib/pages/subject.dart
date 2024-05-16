@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 class Subject extends StatefulWidget {
   const Subject({super.key});
@@ -11,13 +11,13 @@ class Subject extends StatefulWidget {
 class _SubjectState extends State<Subject> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: Column(
           children: [
             Padding(padding: EdgeInsets.all(12)),
             Center(
               child: Text(
-                'Choose Your Subject',
+                'What topic do you want to learn?',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.w500,
@@ -26,6 +26,12 @@ class _SubjectState extends State<Subject> {
                 ),
                     ),
             ),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter a'
+              ),
+            )
           ],
         ),
     );

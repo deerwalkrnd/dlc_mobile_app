@@ -45,16 +45,16 @@ class _TopNavBarState extends State<TopNavBar> {
           children: [
             Image.asset(
               'assets/images/deerwalklearning.png',
-              width: 100,
-              height: 100,
+              width: 150,
+              height: 150,
               fit: BoxFit.cover,
             ),
             SizedBox(width: 8),
             Spacer(),
             SizedBox(
-              height: 30,
+              height: 30, // Adjust vertical margin as needed
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 0), 
+                margin: EdgeInsets.symmetric(vertical: 0), // Adjust horizontal margin as needed
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white,
@@ -69,7 +69,8 @@ class _TopNavBarState extends State<TopNavBar> {
                     icon: null,
                     iconSize: 0,
                     dropdownColor: MyApp.customColor,
-                    style: TextStyle(color: Colors.white),
+                     // Background color of the dropdown
+                    style: TextStyle(color: Colors.white), // Text color of dropdown items
                     items: items.map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,

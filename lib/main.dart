@@ -35,6 +35,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    Center(child: Text('Home')),
+    Center(child: Text('Updates')),
+    Center(child: Text('More')),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const String appTitle = 'Deerwalk Learning Center';
     return Scaffold(
       appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       body: Subject(),
