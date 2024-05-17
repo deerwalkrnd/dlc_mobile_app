@@ -46,7 +46,7 @@ class _TopNavBarState extends State<TopNavBar> {
             Image.asset(
               'assets/images/deerwalklearning.png',
               width: 150,
-              height: 150,
+              
               fit: BoxFit.cover,
             ),
             SizedBox(width: 8),

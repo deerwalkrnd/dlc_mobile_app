@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-class Subject extends StatefulWidget {
-  const Subject({super.key});
-
-  @override
-  State<Subject> createState() => _SubjectState();
-}
-
-class _SubjectState extends State<Subject> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -17,9 +11,9 @@ class _SubjectState extends State<Subject> {
             Padding(padding: EdgeInsets.all(12)),
             Center(
               child: Text(
-                'What topic do you want to learn?',
+                'Choose Your Subject',
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 24,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                   decoration: TextDecoration.none,
@@ -28,9 +22,7 @@ class _SubjectState extends State<Subject> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-              child: Row(
-                
-              ),
+              
             )
           ],
         ),
