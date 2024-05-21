@@ -12,7 +12,11 @@ class _MorePageState extends State<MorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("More Page"),),
-      body: Container(),
+      body: Container(
+        child: Text(
+          'THis is a grade page'
+        ),
+      ),
     );
   }
 }

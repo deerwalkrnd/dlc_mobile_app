@@ -1,7 +1,9 @@
+import 'package:dlc/pages/more.dart';
+import 'package:dlc/pages/unit.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
-import 'package:dlc/pages/subject.dart';
+import 'package:dlc/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,6 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const String appTitle = 'Deerwalk Learning Center';
     return MaterialApp(
+      routes: {
+        
+        '/grade':(context) => UnitPage(),
+      },
       theme: ThemeData(
         scaffoldBackgroundColor: customColor,
       ),
@@ -52,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const String appTitle = 'Deerwalk Learning Center';
     return Scaffold(
       appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
-      body: Subject(),
+      body: Home(),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

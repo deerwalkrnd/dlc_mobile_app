@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Subject extends StatefulWidget {
-  const Subject({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<Subject> createState() => _SubjectState();
+  State<Home> createState() => _HomeState();
 }
 
-class _SubjectState extends State<Subject> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,16 +52,16 @@ class _SubjectState extends State<Subject> {
               ),
             ),
           ),
-           Container(
-            margin: EdgeInsets.only(top: 25),
-             child: const Text(
-               "Choose Your Class",
-               style: TextStyle(
-                   fontWeight: FontWeight.w500,
-                   fontSize: 30,
-                   color: Colors.white),
-             ),
-           ),
+          Container(
+            margin: const EdgeInsets.only(top: 25),
+            child: const Text(
+              "Choose Your Class",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 30,
+                  color: Colors.white),
+            ),
+          ),
           Wrap(
             alignment: WrapAlignment.center,
             children: [
@@ -81,7 +81,7 @@ class _SubjectState extends State<Subject> {
                       ],
                       border: Border.all(color: Colors.white, width: 3),
                       borderRadius: BorderRadius.circular(12),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
@@ -91,7 +91,9 @@ class _SubjectState extends State<Subject> {
                       ),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/grade');
+                      },
                       child: SizedBox(
                         width: 150,
                         height: 150,
@@ -110,9 +112,8 @@ class _SubjectState extends State<Subject> {
                   ),
                 ),
               ),
-      
             ],
-          )
+          ),
         ],
       ),
     );
