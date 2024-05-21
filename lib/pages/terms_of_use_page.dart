@@ -44,7 +44,7 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
                   child: Container(
                     
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(12),
                       child: RichText(
                        text: TextSpan(
                         style: TextStyle(
@@ -112,7 +112,7 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
                             TextSpan(
                               text: 'We reserve the right, at our sole discretion, to modify or replace these terms at any '
                                   'time. We can modify these terms at any time by posting a newer version in our website. '
-                                  'Please review the terms of use regularly for changes.\n\n',
+                                  'Please review the terms of use regularly for changes.',
                             ),
                                   ],
                                 ),
