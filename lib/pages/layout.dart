@@ -4,6 +4,7 @@ import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
+import 'package:dlc/pages/terms_of_use_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePage(),
     UpdatesPage(),
     MorePage(),
+    TermsOfUsePage()
   ];
 
   void _onItemTapped(int index) {

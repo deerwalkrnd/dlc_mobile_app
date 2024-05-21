@@ -6,7 +6,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SingleChildScrollView(
         child:Column(
         children: [
@@ -48,7 +47,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Colors.blueGrey,
+            color: Colors.black.withOpacity(0.35),
             border: Border.all(color: Colors.white, width: 0.25),
           ),
           padding: EdgeInsets.fromLTRB(10,10,10,5),
@@ -61,7 +60,7 @@ class HomePage extends StatelessWidget {
                   imagePath,
                   width: 250,
                   height: 100,
-                  fit: BoxFit.cover, // Added to cover the entire area
+                  fit: BoxFit.cover,
                 ),
               ),
               SizedBox(height: 5),

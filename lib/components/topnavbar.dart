@@ -1,5 +1,8 @@
 import 'package:dlc/main.dart';
+import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class TopNavBar extends StatefulWidget implements PreferredSizeWidget {
   final int selectedIndex;
@@ -43,11 +46,18 @@ class _TopNavBarState extends State<TopNavBar> {
         elevation: 0,
         title: Row(
           children: [
-            Image.asset(
-              'assets/images/deerwalklearning.png',
-              width: 150,
-              
-              fit: BoxFit.cover,
+            GestureDetector(
+              child: Image.asset(
+                'assets/images/deerwalklearning.png',
+                width: 150,
+                fit: BoxFit.cover,
+              ),
+              onTap: (){
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                    );
+              },
             ),
             SizedBox(width: 8),
             Spacer(),
