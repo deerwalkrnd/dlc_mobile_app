@@ -12,7 +12,7 @@ class UpdatesPage extends StatefulWidget {
 }
 
 class _UpdatesPageState extends State<UpdatesPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),

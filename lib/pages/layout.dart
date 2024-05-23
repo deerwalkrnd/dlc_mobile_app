@@ -31,15 +31,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      // appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       body: IndexedStack(
         index: _selectedIndex,
         children: _widgetOptions,
       ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
+      // bottomNavigationBar: MyBottomNavigationBar(
+      //   selectedIndex: _selectedIndex,
+      //   onItemTapped: _onItemTapped,
+      // ),
     );
   }
 }

@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:dlc/components/bottomnav.dart';
+import 'package:dlc/components/topnavbar.dart';
+import 'package:dlc/pages/updates.dart';
+import 'package:dlc/pages/more.dart';
 
-
-class Subject extends StatefulWidget {
-  const Subject({super.key});
+class SubjectPage extends StatefulWidget {
+  const SubjectPage({super.key});
 
   @override
-  State<Subject> createState() => _SubjectState();
+  State<SubjectPage> createState() => _HomePageState();
 }
 
-class _SubjectState extends State<Subject> {
+class _HomePageState extends State<SubjectPage> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    SubjectPage(),
+    UpdatesPage(),
+    MorePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       body: SingleChildScrollView(
         child:Column(
         children: [
@@ -39,13 +61,18 @@ class _SubjectState extends State<Subject> {
             imagePath: "assets/images/subjects/eng.jpg",
             subjectName: 'English',
           ),
+          
         ],
       ),
+      ),
+      bottomNavigationBar: MyBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
 
-Widget subjectContainer({required String imagePath, required String subjectName}) {
+  Widget subjectContainer({required String imagePath, required String subjectName}) {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 15),
@@ -81,5 +108,6 @@ Widget subjectContainer({required String imagePath, required String subjectName}
         ),
       ),
     );
+    
   }
 }
