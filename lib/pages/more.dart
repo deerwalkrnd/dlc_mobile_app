@@ -1,9 +1,8 @@
-import 'package:dlc/pages/press_release_page.dart';
 import 'package:flutter/material.dart';
-import 'package:dlc/pages/flipped_class_page.dart';
-import 'package:dlc/pages/instructors_page.dart';
-import 'package:dlc/pages/press_release_page.dart';
-import 'package:dlc/pages/terms_of_use_page.dart';
+import 'package:dlc/pages/more/flipped_class_page.dart';
+import 'package:dlc/pages/more/instructors_page.dart';
+import 'package:dlc/pages/more/press_release_page.dart';
+import 'package:dlc/pages/more/terms_of_use_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({Key? key}) : super(key: key);

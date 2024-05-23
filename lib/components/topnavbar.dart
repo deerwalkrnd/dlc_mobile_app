@@ -42,6 +42,7 @@ class _TopNavBarState extends State<TopNavBar> {
         ],
       ),
       child: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: MyApp.customColor,
         elevation: 0,
         title: Row(
@@ -62,9 +63,9 @@ class _TopNavBarState extends State<TopNavBar> {
             SizedBox(width: 8),
             Spacer(),
             SizedBox(
-              height: 30, // Adjust vertical margin as needed
+              height: 30, 
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 0), // Adjust horizontal margin as needed
+                margin: EdgeInsets.symmetric(vertical: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white,

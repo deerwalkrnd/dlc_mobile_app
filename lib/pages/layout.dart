@@ -1,10 +1,10 @@
+import 'package:dlc/pages/more/terms_of_use_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
-import 'package:dlc/pages/terms_of_use_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -20,7 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePage(),
     UpdatesPage(),
     MorePage(),
-    TermsOfUsePage()
   ];
 
   void _onItemTapped(int index) {
@@ -33,7 +32,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
-      body: _widgetOptions[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

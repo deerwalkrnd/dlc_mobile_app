@@ -30,12 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  webview_flutter: ^4.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   google_fonts: ^6.2.1
+  youtube_player_flutter: ^8.1.2
+  flutter_inappwebview: ^5.3.2
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +67,8 @@ flutter:
     - assets/images/
     - assets/images/subjects/
     - assets/images/more/
+    - assets/images/instructors/
+    - assets/images/instructors/icons/
     
   #   - images/a_dot_ham.jpeg
 

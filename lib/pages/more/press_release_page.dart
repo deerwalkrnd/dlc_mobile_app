@@ -15,7 +15,7 @@ class PressReleasePage extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    'Terms of Use',
+                    'Press Release',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
@@ -41,7 +41,6 @@ class PressReleasePage extends StatelessWidget {
                             fontSize: 16,
                             color: Colors.white,
                           ),
-                            
                                   textAlign: TextAlign.justify,
                                 ),
                        ),

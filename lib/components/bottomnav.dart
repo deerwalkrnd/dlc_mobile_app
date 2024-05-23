@@ -34,6 +34,10 @@ class MyBottomNavigationBar extends StatelessWidget {
             icon: Icon(Icons.more_horiz_outlined),
             label: 'More',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.more_horiz_outlined),
+          //   label: 'terms',
+          // )
         ],
         currentIndex: selectedIndex,
         selectedItemColor: Colors.white,
