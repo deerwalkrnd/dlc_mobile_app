@@ -1,3 +1,4 @@
+import 'package:dlc/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -15,7 +16,7 @@ class _HomePageState extends State<SubjectPage> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    SubjectPage(),
+    HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
@@ -49,6 +50,19 @@ class _HomePageState extends State<SubjectPage> {
               ),
             ),
           ),
+          subjectContainer(
+            imagePath: "assets/images/subjects/maths.jpg",
+            subjectName: 'Mathematics',
+          ),
+          subjectContainer(
+            imagePath: "assets/images/subjects/phy.jpg",
+            subjectName: 'Science',
+          ),
+          subjectContainer(
+            imagePath: "assets/images/subjects/eng.jpg",
+            subjectName: 'English',
+          ),
+
           subjectContainer(
             imagePath: "assets/images/subjects/maths.jpg",
             subjectName: 'Mathematics',

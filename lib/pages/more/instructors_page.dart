@@ -160,7 +160,7 @@ class IconRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      
       children: [
         Image.asset("assets/images/instructors/icons/1.png"),
         SizedBox(width: 10),

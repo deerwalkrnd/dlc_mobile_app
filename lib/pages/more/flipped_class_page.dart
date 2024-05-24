@@ -4,9 +4,10 @@ import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FlippedClassPage extends StatefulWidget {
+  static String videoID = 'egMWlD3fLJ8';
   const FlippedClassPage({super.key});
 
   @override
@@ -14,7 +15,6 @@ class FlippedClassPage extends StatefulWidget {
 }
 
 class _FlippedClassPageState extends State<FlippedClassPage> {
-  late YoutubePlayerController _controller;
   int _selectedIndex = 2;
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -33,28 +33,17 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: '6BXBksnOVxM', 
-      flags: const YoutubePlayerFlags(
-        autoPlay: false,
-        mute: true,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Future<void> _launchURL(String url) async {
+    if (!await launch(url)) throw 'Could not launch $url';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      appBar: TopNavBar(
+        selectedIndex: _selectedIndex, 
+        onItemTapped: _onItemTapped
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -96,15 +85,27 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Container(
-                  height: 200,
-                  child: YoutubePlayer(
-                    controller: _controller,
-                    aspectRatio: 16/9,
-                    progressIndicatorColor: Colors.amber,
-                    onReady: () {
-                      // Perform any actions when the player is ready
-                    },
+                child: GestureDetector(
+                  onTap: () {
+                    _launchURL('https://www.youtube.com/watch?v=${FlippedClassPage.videoID}');
+                  },
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(3),
+                      image: DecorationImage(
+                        image: NetworkImage('https://img.youtube.com/vi/${FlippedClassPage.videoID}/0.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.white,
+                        size: 64,
+                      ),
+                    ),
                   ),
                 ),
               ),

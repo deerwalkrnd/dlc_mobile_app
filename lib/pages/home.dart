@@ -32,38 +32,65 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<int> grades = [11, 10, 9, 8, 7, 6, 5, 4];
+
     return Scaffold(
       appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       body: SingleChildScrollView(
-        child:Column(
-        children: [
-          Padding(padding: EdgeInsets.all(12)),
-          Center(
-            child: Text(
-              'Choose Your Subject',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                decoration: TextDecoration.none,
+        child: Column(
+          children: [
+            const Padding(padding: EdgeInsets.all(12.0)),
+            const Center(
+              child: Text(
+                'What topic do you want to learn?',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
+                ),
               ),
             ),
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/maths.jpg",
-            subjectName: 'Mathematics',
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/phy.jpg",
-            subjectName: 'Science',
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/eng.jpg",
-            subjectName: 'English',
-          ),
-          
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search for the desired topic',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.search, color: Colors.black),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 25),
+              child: const Text(
+                "Choose Your Class",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 25,
+                    color: Colors.white),
+              ),
+            ),
+            Wrap(
+              alignment: WrapAlignment.center,
+              children: grades.map((grade) => GradeCard(grade: grade)).toList(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
@@ -71,43 +98,61 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
 
-  Widget subjectContainer({required String imagePath, required String subjectName}) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15),
+class GradeCard extends StatelessWidget {
+  final int grade;
+
+  const GradeCard({super.key, required this.grade});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Card(
+        elevation: 20,
+        clipBehavior: Clip.hardEdge,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.black.withOpacity(0.35),
-            border: Border.all(color: Colors.white, width: 0.25),
-          ),
-          padding: EdgeInsets.fromLTRB(10,10,10,5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  imagePath,
-                  width: 250,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 5,
+                blurRadius: 6,
+                offset: const Offset(-6.0, 6.00),
               ),
-              SizedBox(height: 5),
-              Text(
-                subjectName,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 5))
             ],
+            border: Border.all(color: Colors.white, width: 1),
+            borderRadius: BorderRadius.circular(12),
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF0f5288),
+                Color(0xFF5A94BD),
+              ],
+            ),
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/subject');
+            },
+            child: SizedBox(
+              width: 120,
+              height: 120,
+              child: Center(
+                child: Text(
+                  "$grade",
+                  style: TextStyle(
+                      fontSize: 52,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+            splashColor: Colors.blue.withAlpha(40),
           ),
         ),
       ),
     );
-    
   }
 }
