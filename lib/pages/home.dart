@@ -1,3 +1,4 @@
+import 'package:dlc/pages/subject/subject.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -32,10 +33,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> grades = [11, 10, 9, 8, 7, 6, 5, 4];
+    List<int> grades = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      appBar:
+          TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 'What topic do you want to learn?',
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                   decoration: TextDecoration.none,
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(20.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -110,48 +112,46 @@ class GradeCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        elevation: 20,
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                spreadRadius: 5,
-                blurRadius: 6,
-                offset: const Offset(-6.0, 6.00),
+        
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF0f5288),
+                  Color(0xFF5A94BD),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-            ],
-            border: Border.all(color: Colors.white, width: 1),
-            borderRadius: BorderRadius.circular(12),
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF0f5288),
-                Color(0xFF5A94BD),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFFA5D6F2),
+                  offset: Offset(4, 4),
+                ),
               ],
             ),
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, '/subject');
-            },
-            child: SizedBox(
-              width: 120,
-              height: 120,
-              child: Center(
-                child: Text(
-                  "$grade",
-                  style: TextStyle(
-                      fontSize: 52,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/subject');
+              },
+              child: SizedBox(
+                width: 120,
+                height: 120,
+                child: Center(
+                  child: Text(
+                    "$grade",
+                    style: TextStyle(
+                        fontSize: 52,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
                 ),
               ),
             ),
-            splashColor: Colors.blue.withAlpha(40),
           ),
-        ),
+          
       ),
     );
   }

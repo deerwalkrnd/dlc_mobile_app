@@ -100,10 +100,10 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                       ),
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.play_circle_outline,
-                        color: Colors.white,
-                        size: 64,
+                      child: Image.asset(
+                        'assets/images/youtube.png',
+                        width: 64,
+                        height: 64,
                       ),
                     ),
                   ),

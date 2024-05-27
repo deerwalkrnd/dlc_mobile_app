@@ -1,4 +1,5 @@
 import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/subject/chapters.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -87,40 +88,48 @@ class _HomePageState extends State<SubjectPage> {
   }
 
   Widget subjectContainer({required String imagePath, required String subjectName}) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.black.withOpacity(0.35),
-            border: Border.all(color: Colors.white, width: 0.25),
-          ),
-          padding: EdgeInsets.fromLTRB(10,10,10,5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  imagePath,
-                  width: 250,
-                  height: 100,
-                  fit: BoxFit.cover,
+    return GestureDetector(
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black.withOpacity(0.35),
+              border: Border.all(color: Colors.white, width: 0.25),
+            ),
+            padding: EdgeInsets.fromLTRB(10,10,10,5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    imagePath,
+                    width: 250,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                subjectName,
-                style: TextStyle(
-                  color: Colors.white,
+                SizedBox(height: 5),
+                Text(
+                  subjectName,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 5))
-            ],
+                Padding(padding: EdgeInsets.only(bottom: 5))
+              ],
+            ),
           ),
         ),
       ),
+      onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ChapterPage()),
+                          );
+                        },
     );
     
   }
