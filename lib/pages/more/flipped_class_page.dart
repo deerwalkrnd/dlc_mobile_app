@@ -41,8 +41,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(
-        selectedIndex: _selectedIndex, 
-        onItemTapped: _onItemTapped
+        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -50,7 +49,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
+              const Center(
                 child: Text(
                   'Flipped Class',
                   style: TextStyle(
@@ -61,7 +60,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -69,8 +68,8 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                     color: Colors.black.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(3),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(12.0),
                     child: Text(
                       'Flipped classes, by definition, “is a pedagogical model in which the typical lecture and homework elements of a course are reversed”. DLC, through this portal, aims at promoting flipped classes model across the country whereby students watch the lectures, in the form of short videos, in the home and utilize regular class hours for discussion.\n\n'
                       'Researches across the world have shown that student’s learning has significantly improved when taught in this model as compared to the traditional face-to-face model. We aim at improving the learning of each and every student of Nepal.',

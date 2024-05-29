@@ -1,4 +1,3 @@
-import 'package:dlc/pages/subject/subject.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -37,7 +36,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar:
-          TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+          TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -115,7 +114,7 @@ class GradeCard extends StatelessWidget {
         
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   Color(0xFF0f5288),
                   Color(0xFF5A94BD),
@@ -125,7 +124,7 @@ class GradeCard extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.white, width: 2),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color(0xFFA5D6F2),
                   offset: Offset(4, 4),
@@ -142,7 +141,7 @@ class GradeCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "$grade",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 52,
                         fontWeight: FontWeight.w500,
                         color: Colors.white),

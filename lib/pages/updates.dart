@@ -33,7 +33,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      appBar: TopNavBar(),
       body: const Center(
         child: Text('Updates Page Content'),
       ),

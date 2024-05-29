@@ -6,7 +6,7 @@ import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
 
 class TermsOfUsePage extends StatefulWidget {
-  const TermsOfUsePage({Key? key}) : super(key: key);
+  const TermsOfUsePage({super.key});
 
   @override
   _TermsOfUsePageState createState() => _TermsOfUsePageState();
@@ -34,13 +34,13 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      appBar: TopNavBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Center(
+              const Center(
                 child: Text(
                   'Terms of Use',
                   style: TextStyle(
@@ -51,7 +51,7 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -62,7 +62,7 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,

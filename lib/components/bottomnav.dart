@@ -8,13 +8,13 @@ class MyBottomNavigationBar extends StatelessWidget {
   const MyBottomNavigationBar({
     required this.selectedIndex,
     required this.onItemTapped,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           top: BorderSide(width: 0.25, color: Colors.white),
         ),

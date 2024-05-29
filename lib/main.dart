@@ -1,10 +1,16 @@
 import 'package:dlc/pages/subject/subject.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/layout.dart';
-import 'package:dlc/pages/unit.dart';
+import 'package:dlc/models/dropdown_state.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => DropdownState(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,8 +22,7 @@ class MyApp extends StatelessWidget {
     const String appTitle = 'Deerwalk Learning Center';
     return MaterialApp(
       routes: {
-        
-        '/subject':(context) => SubjectPage(),
+        '/subject':(context) => const SubjectPage(),
       },
       theme: ThemeData(
         scaffoldBackgroundColor: customColor,

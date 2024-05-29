@@ -1,39 +1,20 @@
 import 'package:dlc/main.dart';
 import 'package:dlc/pages/home.dart';
+import 'package:dlc/models/dropdown_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-class TopNavBar extends StatefulWidget implements PreferredSizeWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onItemTapped;
-
-  TopNavBar({
-    required this.selectedIndex,
-    required this.onItemTapped,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _TopNavBarState createState() => _TopNavBarState();
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-}
-
-class _TopNavBarState extends State<TopNavBar> {
-  String dropdownValue = 'Nepali';
-  bool isDropdownOpened = false;
-
-  var items = [
-    'Nepali',
-    'English',
-  ];
+class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
+  const TopNavBar();
 
   @override
   Widget build(BuildContext context) {
+    final dropdownState = Provider.of<DropdownState>(context); 
+
+    final List<String> items=['Nepali','English'];
+
     return Container(
       decoration: BoxDecoration(
-        
         boxShadow: [
           BoxShadow(
             color: Colors.white,
@@ -69,7 +50,7 @@ class _TopNavBarState extends State<TopNavBar> {
                 margin: EdgeInsets.symmetric(vertical: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: isDropdownOpened ? Colors.white : Colors.white,
+                    color: Colors.white,
                     width: 0.5,
                   ),
                   borderRadius: BorderRadius.circular(2),
@@ -77,7 +58,7 @@ class _TopNavBarState extends State<TopNavBar> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    value: dropdownValue,
+                    value: dropdownState.value, // Use dropdownState.value
                     iconSize: 0,
                     dropdownColor: MyApp.customColor,
                     style: TextStyle(color: Colors.white),
@@ -87,15 +68,8 @@ class _TopNavBarState extends State<TopNavBar> {
                         child: Text(item),
                       );
                     }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        isDropdownOpened = !isDropdownOpened;
-                      });
+                    onChanged: (newValue) {
+                      dropdownState.value = newValue!;
                     },
                   ),
                 ),
@@ -106,4 +80,7 @@ class _TopNavBarState extends State<TopNavBar> {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

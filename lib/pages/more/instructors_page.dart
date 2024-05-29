@@ -4,6 +4,7 @@ import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
+import 'package:dlc/pages/more/widgets/instructorcard.dart';
 
 class InstructorsPage extends StatefulWidget {
   const InstructorsPage({super.key});
@@ -31,31 +32,31 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  final List<Instructor> instructors = [
-    Instructor(imagePath: "assets/images/instructors/1.png", name: 'Aakash Chandra Giri'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
+  final List<InstructorCard> instructors = [
+    const InstructorCard(
+      imagePath: "assets/images/instructors/1.png",
+      name: 'Aakash Chandra Giri',
+      messageUrl: 'sms:1234567890', 
+      phoneUrl: 'tel:1234567890',
+      linkedInUrl: 'https://www.linkedin.com/in/aakashchandragiri/', 
+    ),
+    const InstructorCard(
+      imagePath: "assets/images/instructors/2.png",
+      name: 'Aakancha Thapa',
+      messageUrl: 'sms:0987654321', 
+      phoneUrl: 'tel:0987654321', 
+      linkedInUrl: 'https://www.linkedin.com/in/aakanchathapa/',
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
+      appBar: TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
+            const Center(
               child: Text(
                 'Instructors',
                 style: TextStyle(
@@ -67,7 +68,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: _buildRows(instructors),
               ),
@@ -82,7 +83,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  List<Widget> _buildRows(List<Instructor> instructors) {
+  List<Widget> _buildRows(List<InstructorCard> instructors) {
     return List.generate(
       (instructors.length / 2).ceil(),
       (index) {
@@ -93,81 +94,18 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  Widget _buildRow(List<Instructor> instructors) {
+  Widget _buildRow(List<InstructorCard> instructors) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
         return InstructorCard(
           imagePath: instructor.imagePath,
           name: instructor.name,
+          messageUrl: instructor.messageUrl,
+          phoneUrl: instructor.phoneUrl, 
+          linkedInUrl: instructor.linkedInUrl, 
         );
       }).toList(),
-    );
-  }
-}
-
-class Instructor {
-  final String imagePath;
-  final String name;
-
-  const Instructor({
-    required this.imagePath,
-    required this.name,
-  });
-}
-
-class InstructorCard extends StatelessWidget {
-  final String imagePath;
-  final String name;
-
-  const InstructorCard({
-    Key? key,
-    required this.imagePath,
-    required this.name,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-            width: 100,
-            height: 100,
-          ),
-          SizedBox(height: 10),
-          Text(
-            name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-          SizedBox(height: 10),
-          IconRow(),
-          Padding(padding: EdgeInsets.only(bottom: 20)),
-        ],
-      ),
-    );
-  }
-}
-
-class IconRow extends StatelessWidget {
-  const IconRow({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      
-      children: [
-        Image.asset("assets/images/instructors/icons/1.png"),
-        SizedBox(width: 10),
-        Image.asset("assets/images/instructors/icons/2.png"),
-        SizedBox(width: 10),
-        Image.asset("assets/images/instructors/icons/3.png"),
-      ],
     );
   }
 }
