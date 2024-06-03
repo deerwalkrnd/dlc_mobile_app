@@ -22,17 +22,33 @@ class IconRow extends StatelessWidget {
     }
   }
 
+  Future<void> _launchPhoneURL(String url) async {
+    final Uri launchUri = Uri(
+          scheme: 'tel',
+          path: url,
+        );
+        await launchUrl(launchUri);
+  }
+
+  Future<void> _launchMailURL(String url) async {
+    final Uri launchUri = Uri(
+          scheme: 'mailto',
+          path: url,
+        );
+        await launchUrl(launchUri);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => _launchURL(messageUrl), 
+          onTap: () => _launchPhoneURL(phoneUrl), 
           child: Image.asset("assets/images/instructors/icons/1.png"),
         ),
         const SizedBox(width: 10),
         GestureDetector(
-          onTap: () => _launchURL(phoneUrl), 
+          onTap: () => _launchMailURL(messageUrl), 
           child: Image.asset("assets/images/instructors/icons/2.png"),
         ),
         const SizedBox(width: 10),

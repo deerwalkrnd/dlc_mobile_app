@@ -18,15 +18,6 @@ class InstructorCard extends StatelessWidget {
     required this.linkedInUrl,
   });
 
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

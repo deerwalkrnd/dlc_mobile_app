@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
@@ -36,15 +37,15 @@ class _InstructorsPageState extends State<InstructorsPage> {
     const InstructorCard(
       imagePath: "assets/images/instructors/1.png",
       name: 'Aakash Chandra Giri',
-      messageUrl: 'sms:1234567890', 
-      phoneUrl: 'tel:1234567890',
+      messageUrl: 'mailto:pratishma.acharya@deerwalk.edu.np', 
+      phoneUrl: '9862361790',
       linkedInUrl: 'https://www.linkedin.com/in/aakashchandragiri/', 
     ),
     const InstructorCard(
       imagePath: "assets/images/instructors/2.png",
       name: 'Aakancha Thapa',
-      messageUrl: 'sms:0987654321', 
-      phoneUrl: 'tel:0987654321', 
+      messageUrl: 'mailto:pratesmaacharya@deerwalk.edu.np', 
+      phoneUrl: '21213123123', 
       linkedInUrl: 'https://www.linkedin.com/in/aakanchathapa/',
     ),
   ];
@@ -102,8 +103,8 @@ class _InstructorsPageState extends State<InstructorsPage> {
           imagePath: instructor.imagePath,
           name: instructor.name,
           messageUrl: instructor.messageUrl,
-          phoneUrl: instructor.phoneUrl, 
-          linkedInUrl: instructor.linkedInUrl, 
+          phoneUrl: instructor.phoneUrl,
+          linkedInUrl: instructor.linkedInUrl,
         );
       }).toList(),
     );

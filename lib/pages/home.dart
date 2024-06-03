@@ -3,6 +3,8 @@ import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:dlc/models/grade.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,12 +15,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  late Future<Grade> futureGrades;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    futureGrades = ApiService().fetchGrades();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,11 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> grades = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-
     return Scaffold(
-      appBar:
-          TopNavBar(),
+      appBar: TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -77,18 +83,29 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 25),
+              margin: const EdgeInsets.only(top: 15),
               child: const Text(
                 "Choose Your Class",
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 25,
+                    fontSize: 22,
                     color: Colors.white),
               ),
             ),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: grades.map((grade) => GradeCard(grade: grade)).toList(),
+            FutureBuilder<Grade>(
+              future: futureGrades,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text("No grades available"));
+                } else {
+                  Grade grade = snapshot.data!;
+                  return GradeCard(grade: grade);
+                }
+              },
             ),
           ],
         ),
@@ -102,7 +119,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class GradeCard extends StatelessWidget {
-  final int grade;
+  final Grade grade;
 
   const GradeCard({super.key, required this.grade});
 
@@ -111,46 +128,44 @@ class GradeCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF0f5288),
-                  Color(0xFF5A94BD),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0xFFA5D6F2),
-                  offset: Offset(4, 4),
-                ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF0f5288),
+                Color(0xFF5A94BD),
               ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/subject');
-              },
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: Center(
-                  child: Text(
-                    "$grade",
-                    style: const TextStyle(
-                        fontSize: 52,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0xFFA5D6F2),
+                offset: Offset(4, 4),
+              ),
+            ],
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/subject');
+            },
+            child: SizedBox(
+              width: 120,
+              height: 120,
+              child: Center(
+                child: Text(
+                  grade.grade,
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
           ),
-          
+        ),
       ),
     );
   }
