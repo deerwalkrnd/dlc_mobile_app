@@ -11,7 +11,7 @@ class Grade {
         Grade(
           grade: grade,
         ),
-      _ => throw const FormatException('Failed to load album.'),
+      _ => throw const FormatException('Failed to load grade.'),
     };
   }
 }
