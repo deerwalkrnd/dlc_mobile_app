@@ -129,13 +129,9 @@ class _ChapterOnePageState extends State<ChapterOnePage> {
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: Colors.black38,
                     borderRadius: BorderRadius.circular(3),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          'https://img.youtube.com/vi/${ChapterOnePage.videoID}/0.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+                    
                   ),
                   child: Center(
                     child: Image.asset(

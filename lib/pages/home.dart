@@ -15,24 +15,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  late Future<Grade> futureGrades;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
+    HomeWidget(),
     UpdatesPage(),
     MorePage(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    futureGrades = ApiService().fetchGrades();
-  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => _widgetOptions[index]),
@@ -43,76 +37,125 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Padding(padding: EdgeInsets.all(12.0)),
-            const Center(
-              child: Text(
-                'What topic do you want to learn?',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: const Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search for the desired topic',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.search, color: Colors.black),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: const Text(
-                "Choose Your Class",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 22,
-                    color: Colors.white),
-              ),
-            ),
-            FutureBuilder<Grade>(
-              future: futureGrades,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error: ${snapshot.error}"));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text("No grades available"));
-                } else {
-                  Grade grade = snapshot.data!;
-                  return GradeCard(grade: grade);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+      body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class HomeWidget extends StatefulWidget {
+  const HomeWidget({super.key});
+
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  TextEditingController _searchController = TextEditingController();
+  late Future<List<Grade>> futureGrades;
+  List<Grade> filteredGrades = [];
+
+  @override
+  void initState() {
+    super.initState();
+    futureGrades = ApiService().fetchGrades();
+  }
+
+  void _filterGrades(String query) {
+    futureGrades.then((grades) {
+      setState(() {
+        if (query.isEmpty) {
+          filteredGrades = grades;
+        } else {
+          filteredGrades = grades
+              .where((grade) =>
+                  grade.grade.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Padding(padding: EdgeInsets.all(12.0)),
+          const Center(
+            child: Text(
+              'What topic do you want to learn?',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+                decoration: TextDecoration.none,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(32),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: 'Search for the desired topic',
+                        border: InputBorder.none,
+                      ),
+                      onChanged: _filterGrades,
+                    ),
+                  ),
+                  const Icon(Icons.search, color: Colors.black),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 15),
+            child: const Text(
+              "Choose Your Class",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 22,
+                  color: Colors.white),
+            ),
+          ),
+          FutureBuilder<List<Grade>>(
+            future: futureGrades,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else if (!snapshot.hasData) {
+                return const Center(child: Text("No grades available"));
+              } else {
+                final grades = filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: grades.length,
+                  itemBuilder: (context, index) {
+                    final grade = grades[index];
+                    return GradeCard(grade: grade);
+                  },
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -125,6 +168,8 @@ class GradeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String displayGrade = grade.grade.length >= 5 ? grade.grade.substring(6) : 'N/A';
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -156,7 +201,7 @@ class GradeCard extends StatelessWidget {
               height: 120,
               child: Center(
                 child: Text(
-                  grade.grade,
+                  displayGrade,
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,

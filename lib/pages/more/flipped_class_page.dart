@@ -91,12 +91,9 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      
                       borderRadius: BorderRadius.circular(3),
-                      image: DecorationImage(
-                        image: NetworkImage('https://img.youtube.com/vi/${FlippedClassPage.videoID}/0.jpg'),
-                        fit: BoxFit.cover,
-                      ),
+                      color: Colors.black38
                     ),
                     child: Center(
                       child: Image.asset(
