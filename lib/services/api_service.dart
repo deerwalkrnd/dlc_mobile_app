@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dlc/models/grade_subject.dart';
+import 'package:dlc/models/unit.dart';
 import 'package:http/http.dart' as http;
 import '../models/grade.dart';
 import '../models/instructors.dart';
@@ -27,10 +28,7 @@ Future<List<Grade_Subject>> fetchGradeSubjects(String grade) async {
     final response = await http.get(Uri.parse('$baseUrl/grade_subject/${grade}'));
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-      print(response.body); 
-      print(jsonData); 
-      
-      // Accessing the grade data directly using the grade key
+
       final subjectsMap = jsonData['Grade_${grade}'] as Map<String, dynamic>;
       final subjects = subjectsMap.entries.map((entry) {
         final subjectData = entry.value as Map<String, dynamic>;
@@ -44,6 +42,28 @@ Future<List<Grade_Subject>> fetchGradeSubjects(String grade) async {
   } catch (e) {
     print('$e');
     throw Exception('Error fetching grade subjects: $e');
+  }
+}
+
+Future<List<Unit>> fetchUnit(String subject) async {
+  try {
+    final response = await http.get(Uri.parse('$baseUrl/unit/${subject}'));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+
+      final unitsMap = jsonData['Subject_${subject}'] as Map<String, dynamic>;
+      final units = unitsMap.entries.map((entry) {
+        final unitData = entry.value as Map<String, dynamic>;
+        return Unit.fromJson(unitData);
+      }).toList();
+      
+      return units;
+    } else {
+      throw Exception('Failed to load units: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('$e');
+    throw Exception('Error fetching units: $e');
   }
 }
 
