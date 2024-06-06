@@ -21,9 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const String appTitle = 'Deerwalk Learning Center';
     return MaterialApp(
-      routes: {
-        '/subject':(context) => const SubjectPage(),
-      },
+      
       theme: ThemeData(
         scaffoldBackgroundColor: customColor,
       ),

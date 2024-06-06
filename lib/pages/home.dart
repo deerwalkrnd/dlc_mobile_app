@@ -1,3 +1,4 @@
+import 'package:dlc/pages/subject/subject.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -142,15 +143,12 @@ class _HomeWidgetState extends State<HomeWidget> {
               } else if (!snapshot.hasData) {
                 return const Center(child: Text("No grades available"));
               } else {
-                final grades = filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
-                return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: grades.length,
-                  itemBuilder: (context, index) {
-                    final grade = grades[index];
-                    return GradeCard(grade: grade);
-                  },
+                final grades =
+                    filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
+                return Wrap(
+                  spacing: 10.0, // horizontal space between widgets
+                  runSpacing: 10.0, // vertical space between lines
+                  children: grades.map((grade) => GradeCard(grade: grade)).toList(),
                 );
               }
             },
@@ -164,53 +162,63 @@ class _HomeWidgetState extends State<HomeWidget> {
 class GradeCard extends StatelessWidget {
   final Grade grade;
 
-  const GradeCard({super.key, required this.grade});
+  const GradeCard({Key? key, required this.grade}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String displayGrade = grade.grade.length >= 5 ? grade.grade.substring(6) : 'N/A';
+    String displayGrade =
+        grade.grade.length >= 5 ? grade.grade.substring(6) : 'N/A';
 
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFF0f5288),
-                Color(0xFF5A94BD),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white, width: 2),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0xFFA5D6F2),
-                offset: Offset(4, 4),
+        child: 
+
+         Container(
+          width: 120,
+          height: 120,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF0f5288),
+                    Color(0xFF5A94BD),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0xFFA5D6F2),
+                    offset: Offset(4, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, '/subject');
-            },
-            child: SizedBox(
-              width: 120,
-              height: 120,
-              child: Center(
-                child: Text(
-                  displayGrade,
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubjectPage(grade: displayGrade)),
+                  );
+                },
+                child: SizedBox(
+                  child: Center(
+                    child: Text(
+                      displayGrade,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+         
+        
       ),
     );
   }

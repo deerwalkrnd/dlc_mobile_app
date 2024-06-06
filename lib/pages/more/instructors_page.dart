@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dlc/pages/updates.dart';
@@ -6,6 +7,8 @@ import 'package:dlc/pages/more.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/more/widgets/instructorcard.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:dlc/models/instructors.dart';
 
 class InstructorsPage extends StatefulWidget {
   const InstructorsPage({super.key});
@@ -16,12 +19,19 @@ class InstructorsPage extends StatefulWidget {
 
 class _InstructorsPageState extends State<InstructorsPage> {
   int _selectedIndex = 0;
+  Future<List<Instructor>>? _futureInstructors;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _futureInstructors = ApiService().fetchInstructors();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,50 +43,49 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  final List<InstructorCard> instructors = [
-    const InstructorCard(
-      imagePath: "assets/images/instructors/1.png",
-      name: 'Aakash Chandra Giri',
-      messageUrl: 'mailto:pratishma.acharya@deerwalk.edu.np', 
-      phoneUrl: '9862361790',
-      linkedInUrl: 'https://www.linkedin.com/in/aakashchandragiri/', 
-    ),
-    const InstructorCard(
-      imagePath: "assets/images/instructors/2.png",
-      name: 'Aakancha Thapa',
-      messageUrl: 'mailto:pratesmaacharya@deerwalk.edu.np', 
-      phoneUrl: '21213123123', 
-      linkedInUrl: 'https://www.linkedin.com/in/aakanchathapa/',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Center(
-              child: Text(
-                'Instructors',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
-                ),
-              ),
+      body: _futureInstructors == null 
+          ? Center(child: Text("error"))
+          : FutureBuilder<List<Instructor>>(
+              future: _futureInstructors,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No instructors found.'));
+                } else {
+                  final instructors = snapshot.data!;
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            'Instructors',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: _buildRows(instructors),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: _buildRows(instructors),
-              ),
-            ),
-          ],
-        ),
-      ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
@@ -84,7 +93,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  List<Widget> _buildRows(List<InstructorCard> instructors) {
+  List<Widget> _buildRows(List<Instructor> instructors) {
     return List.generate(
       (instructors.length / 2).ceil(),
       (index) {
@@ -95,18 +104,19 @@ class _InstructorsPageState extends State<InstructorsPage> {
     );
   }
 
-  Widget _buildRow(List<InstructorCard> instructors) {
+  Widget _buildRow(List<Instructor> instructors) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
         return InstructorCard(
-          imagePath: instructor.imagePath,
-          name: instructor.name,
-          messageUrl: instructor.messageUrl,
-          phoneUrl: instructor.phoneUrl,
-          linkedInUrl: instructor.linkedInUrl,
+          imagePath: instructor.image_url, 
+          name: instructor.name_en,
+          messageUrl: 'mailto:${instructor.email}',
+          phoneUrl: 'tel:${instructor.contact_number}',
+          linkedInUrl: instructor.linkedin_url ?? '',
         );
       }).toList(),
     );
   }
+
 }

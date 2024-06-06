@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/subject/chapters.dart';
 
-class subjectContainer extends StatelessWidget {
+class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
 
-  const subjectContainer({super.key,required this.imagePath,
+  const SubjectCard({super.key,required this.imagePath,
     required this.subjectName,});
 
   @override

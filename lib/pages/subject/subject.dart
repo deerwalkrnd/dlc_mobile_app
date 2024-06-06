@@ -1,21 +1,31 @@
-import 'package:dlc/pages/home.dart';
-import 'package:dlc/pages/subject/chapters.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
-import 'package:dlc/pages/subject/widgets/subjectcard.dart';
+import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
+import 'package:dlc/pages/subject/widgets/subjectcard.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:dlc/models/grade_subject.dart';
 
 class SubjectPage extends StatefulWidget {
-  const SubjectPage({super.key});
+  final String grade;
+
+  const SubjectPage({super.key, required this.grade});
 
   @override
-  State<SubjectPage> createState() => _HomePageState();
+  State<SubjectPage> createState() => _SubjectPageState();
 }
 
-class _HomePageState extends State<SubjectPage> {
+class _SubjectPageState extends State<SubjectPage> {
   int _selectedIndex = 0;
+  late Future<List<Grade_Subject>> futureSubjects;
+
+  @override
+  void initState() {
+    super.initState();
+    futureSubjects = ApiService().fetchGradeSubjects(widget.grade);
+  }
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -37,47 +47,41 @@ class _HomePageState extends State<SubjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Padding(padding: EdgeInsets.all(12)),
-            const Center(
-              child: Text(
-                'Choose Your Subject',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
-                ),
+      body: FutureBuilder<List<Grade_Subject>>(
+        future: futureSubjects,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No subjects found.'));
+          } else {
+            final subjects = snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.all(12)),
+                  const Center(
+                    child: Text(
+                      'Choose Your Subject',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                  ...subjects.map((subject) => SubjectCard(
+                    imagePath: subject.subject_image_url,
+                    subjectName: subject.subject_name,
+                  )).toList(),
+                ],
               ),
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/maths.jpg",
-              subjectName: 'Mathematics',
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/phy.jpg",
-              subjectName: 'Science',
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/eng.jpg",
-              subjectName: 'English',
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/maths.jpg",
-              subjectName: 'Mathematics',
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/phy.jpg",
-              subjectName: 'Science',
-            ),
-            subjectContainer(
-              imagePath: "assets/images/subjects/eng.jpg",
-              subjectName: 'English',
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
