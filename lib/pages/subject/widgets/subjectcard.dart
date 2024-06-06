@@ -5,8 +5,11 @@ class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
 
-  const SubjectCard({super.key,required this.imagePath,
-    required this.subjectName,});
+  const SubjectCard({
+    super.key,
+    required this.imagePath,
+    required this.subjectName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class SubjectCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ChapterPage()),
+          MaterialPageRoute(builder: (context) => ChapterPage(subjectName: subjectName)),
         );
       },
     );

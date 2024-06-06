@@ -1,15 +1,17 @@
-import 'package:dlc/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:dlc/models/unit.dart';
+import 'package:dlc/pages/home.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 
 class ChapterOnePage extends StatefulWidget {
   static String videoID = 'egMWlD3fLJ8';
-  const ChapterOnePage({super.key});
+  final Unit unit;
+
+  const ChapterOnePage({super.key, required this.unit});
 
   @override
   State<ChapterOnePage> createState() => _ChapterOnePageState();
@@ -44,25 +46,20 @@ class _ChapterOnePageState extends State<ChapterOnePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> chapters = [11, 10, 9, 8, 7, 6, 5, 4];
-
     return Scaffold(
-      appBar:
-          TopNavBar(),
+      appBar: TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const Padding(padding: EdgeInsets.all(12.0)),
             Stack(
               children: [
-                
-                   IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -104,13 +101,28 @@ class _ChapterOnePageState extends State<ChapterOnePage> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  '1.1   Quantities & Dimensional  Analysis',
+                  widget.unit.en,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  widget.unit.np,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
@@ -123,15 +135,13 @@ class _ChapterOnePageState extends State<ChapterOnePage> {
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                 onTap: () {
-                  _launchURL(
-                      'https://www.youtube.com/watch?v=${ChapterOnePage.videoID}');
+                  _launchURL('https://www.youtube.com/watch?v=${ChapterOnePage.videoID}');
                 },
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
                     color: Colors.black38,
                     borderRadius: BorderRadius.circular(3),
-                    
                   ),
                   child: Center(
                     child: Image.asset(
@@ -142,12 +152,6 @@ class _ChapterOnePageState extends State<ChapterOnePage> {
                   ),
                 ),
               ),
-            ),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: chapters
-                  .map((chapter) => ChapterCard(chapter: chapter))
-                  .toList(),
             ),
           ],
         ),

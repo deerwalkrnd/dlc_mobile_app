@@ -146,8 +146,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 final grades =
                     filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
                 return Wrap(
-                  spacing: 10.0, // horizontal space between widgets
-                  runSpacing: 10.0, // vertical space between lines
+                  spacing: 10.0, 
+                  runSpacing: 10.0, 
                   children: grades.map((grade) => GradeCard(grade: grade)).toList(),
                 );
               }
