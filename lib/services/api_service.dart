@@ -26,46 +26,73 @@ class ApiService {
 Future<List<Grade_Subject>> fetchGradeSubjects(String grade) async {
   try {
     final response = await http.get(Uri.parse('$baseUrl/grade_subject/${grade}'));
+    print('Request URL: $baseUrl/grade_subject/${grade}');
+    
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-
+      print('Response JSON: $jsonData');
+      
       final subjectsMap = jsonData['Grade_${grade}'] as Map<String, dynamic>;
+      print('Subjects Map: $subjectsMap');
+      
       final subjects = subjectsMap.entries.map((entry) {
         final subjectData = entry.value as Map<String, dynamic>;
-        return Grade_Subject.fromJson(subjectData);
+        print('Subject Data: $subjectData');
+        
+        final gradeSubject = Grade_Subject.fromJson(subjectData);
+        print('Grade_Subject: $gradeSubject');
+        
+        return gradeSubject;
       }).toList();
       
+      print('Subjects List: $subjects');
       return subjects;
     } else {
       throw Exception('Failed to load grade subjects: ${response.statusCode}');
     }
   } catch (e) {
-    print('$e');
+    print('Error: $e');
     throw Exception('Error fetching grade subjects: $e');
   }
 }
 
-Future<List<Unit>> fetchUnit(String subject) async {
+Future<List<Unit>> fetchUnit(int gradeSubjectId) async {
   try {
-    final response = await http.get(Uri.parse('$baseUrl/unit/${subject}'));
+    final response = await http.get(Uri.parse('$baseUrl/unit/$gradeSubjectId'));
+    print('$baseUrl/unit/$gradeSubjectId');
+    
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-
-      final unitsMap = jsonData['Subject_${subject}'] as Map<String, dynamic>;
-      final units = unitsMap.entries.map((entry) {
+      final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      print('Response JSON: $jsonResponse');
+      
+      if (jsonResponse['Subject$gradeSubjectId'] == null) {
+        throw Exception('Error fetching units: null response');
+      }
+      
+      final unitsJson = jsonResponse['Subject$gradeSubjectId'] as Map<String, dynamic>;
+      print('Units JSON: $unitsJson');
+      
+      final units = unitsJson.entries.map((entry) {
         final unitData = entry.value as Map<String, dynamic>;
-        return Unit.fromJson(unitData);
+        print('Unit Data: $unitData');
+        
+        final unit = Unit.fromJson(unitData);
+        print('Unit: $unit');
+        
+        return unit;
       }).toList();
       
+      print('Units List: $units');
       return units;
     } else {
       throw Exception('Failed to load units: ${response.statusCode}');
     }
   } catch (e) {
-    print('$e');
+    print('Error: $e');
     throw Exception('Error fetching units: $e');
   }
 }
+
 
 Future<List<Instructor>> fetchInstructors() async {
   try {

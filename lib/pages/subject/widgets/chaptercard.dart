@@ -47,23 +47,21 @@ class UnitCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        unit.en,
-                        style: const TextStyle(
-                          fontSize: 40,
+                        "Unit ${unit.id - 77}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "Unit and Dimension",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
+                      Text(
+                        unit.en,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
                         ),
                       ),
                     ],

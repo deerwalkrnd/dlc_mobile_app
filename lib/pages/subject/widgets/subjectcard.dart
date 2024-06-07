@@ -4,11 +4,13 @@ import 'package:dlc/pages/subject/chapters.dart';
 class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
+  final int subjectId;
 
   const SubjectCard({
     super.key,
     required this.imagePath,
     required this.subjectName,
+    required this.subjectId,
   });
 
   @override
@@ -52,7 +54,7 @@ class SubjectCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ChapterPage(subjectName: subjectName)),
+          MaterialPageRoute(builder: (context) => ChapterPage(subjectName: subjectName, grade_subject_id: subjectId)),
         );
       },
     );

@@ -10,8 +10,9 @@ import 'package:dlc/models/unit.dart';
 
 class ChapterPage extends StatefulWidget {
   final String subjectName;
+  final int grade_subject_id;
 
-  const ChapterPage({super.key, required this.subjectName});
+  const ChapterPage({super.key, required this.subjectName, required this.grade_subject_id});
 
   @override
   State<ChapterPage> createState() => _ChapterPageState();
@@ -19,8 +20,7 @@ class ChapterPage extends StatefulWidget {
 
 class _ChapterPageState extends State<ChapterPage> {
   int _selectedIndex = 0;
-  List<Unit> _units = [];
-  bool _isLoading = true;
+  late Future<List<Unit>> futureUnits;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -41,31 +41,25 @@ class _ChapterPageState extends State<ChapterPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUnits();
-  }
-
-  Future<void> _fetchUnits() async {
-    try {
-      List<Unit> units = await ApiService().fetchUnit(widget.subjectName);
-      setState(() {
-        _units = units;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      print('Error fetching units: $e');
-    }
+    futureUnits = ApiService().fetchUnit(widget.grade_subject_id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+      body: FutureBuilder<List<Unit>>(
+        future: futureUnits,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No subjects found.'));
+          } else {
+            final units = snapshot.data!;
+            return SingleChildScrollView(
               child: Column(
                 children: [
                   const Padding(padding: EdgeInsets.all(12.0)),
@@ -120,13 +114,14 @@ class _ChapterPageState extends State<ChapterPage> {
                   ),
                   Wrap(
                     alignment: WrapAlignment.center,
-                    children: _units
-                        .map((unit) => UnitCard(unit: unit))
-                        .toList(),
+                    children: units.map((unit) => UnitCard(unit: unit,)).toList(),
                   ),
                 ],
               ),
-            ),
+            );
+          }
+        },
+      ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

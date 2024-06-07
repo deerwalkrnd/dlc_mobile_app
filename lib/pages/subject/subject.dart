@@ -74,8 +74,9 @@ class _SubjectPageState extends State<SubjectPage> {
                     ),
                   ),
                   ...subjects.map((subject) => SubjectCard(
-                    imagePath: subject.subject_image_url,
-                    subjectName: subject.subject_name,
+                    imagePath: subject.subjectImageUrl,
+                    subjectName: subject.subjectName,
+                    subjectId: subject.id,
                   )).toList(),
                 ],
               ),

@@ -1,20 +1,24 @@
 class Grade_Subject {
-  final String subject_name;
-  final String subject_image_url;
+  final String subjectName;
+  final String subjectImageUrl;
+  final int id;
 
-  Grade_Subject({required this.subject_name,required this.subject_image_url});
+  Grade_Subject({
+    required this.subjectName,
+    required this.subjectImageUrl,
+    required this.id,
+  });
 
   factory Grade_Subject.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'subject_name': String subject_name,
-        'subject_image_url': String subject_image_url,
-      } =>
-        Grade_Subject(
-          subject_name: subject_name,
-          subject_image_url: subject_image_url,
-        ),
-      _ => throw const FormatException('Failed to load grade subject.'),
-    };
+    return Grade_Subject(
+      subjectName: json['subject_name'],
+      subjectImageUrl: json['subject_image_url'],
+      id: json['id'] as int,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Grade_Subject(subjectName: $subjectName, subjectImageUrl: $subjectImageUrl, id: $id)';
   }
 }
