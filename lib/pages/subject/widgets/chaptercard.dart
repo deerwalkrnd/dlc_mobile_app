@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:dlc/models/unit.dart';
 import 'package:dlc/pages/subject/chaptersone.dart';
 
+import '../../../models/GradeSubject.dart';
+
 class UnitCard extends StatelessWidget {
-  final Unit unit;
+  final Unittwo unit;
 
   const UnitCard({super.key, required this.unit});
 
@@ -47,18 +49,18 @@ class UnitCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "Unit ${unit.id - 77}",
+                        "Unit ${unit.unitNumber}",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        unit.en,
+                        unit.name,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,

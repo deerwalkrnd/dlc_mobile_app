@@ -1,5 +1,5 @@
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/main.dart';
-import 'package:dlc/pages/home.dart';
 import 'package:dlc/models/dropdown_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,12 +9,12 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dropdownState = Provider.of<DropdownState>(context); 
+    final dropdownState = Provider.of<DropdownState>(context);
 
-    final List<String> items=['Nepali','English'];
+    final List<String> items = ['Nepali', 'English'];
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: Colors.white,
@@ -25,29 +25,38 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: MyApp.customColor,
+        backgroundColor: oneBlue,
         elevation: 0,
         title: Row(
           children: [
             GestureDetector(
-              child: Image.asset(
-                'assets/images/deerwalklearning.png',
-                width: 150,
-                fit: BoxFit.cover,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  constraints:
+                      const BoxConstraints(maxHeight: 150, maxWidth: 160),
+                  child: Image.asset(
+                    'assets/images/deerwalklearning.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(builder: (context) => const MyApp()),
                 );
               },
             ),
-            SizedBox(width: 8),
-            Spacer(),
-            SizedBox(
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
               height: 30,
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 0),
+                margin: const EdgeInsets.symmetric(vertical: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white,
@@ -57,11 +66,12 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     value: dropdownState.value, // Use dropdownState.value
                     iconSize: 0,
-                    dropdownColor: MyApp.customColor,
-                    style: TextStyle(color: Colors.white),
+                    dropdownColor: oneBlue,
+                    style: const TextStyle(color: Colors.white),
                     items: items.map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
@@ -75,12 +85,12 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

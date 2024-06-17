@@ -1,4 +1,3 @@
-import 'package:dlc/pages/subject/subject.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -6,6 +5,7 @@ import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/grade.dart';
+import 'package:dlc/pages/subject/subject.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,20 +63,27 @@ class _HomeWidgetState extends State<HomeWidget> {
   void initState() {
     super.initState();
     futureGrades = ApiService().fetchGrades();
+    futureGrades.then((grades) {
+      setState(() {
+        filteredGrades = grades;
+      });
+    });
   }
 
   void _filterGrades(String query) {
-    futureGrades.then((grades) {
-      setState(() {
-        if (query.isEmpty) {
+    setState(() {
+      if (query.isEmpty) {
+        futureGrades.then((grades) {
           filteredGrades = grades;
-        } else {
+        });
+      } else {
+        futureGrades.then((grades) {
           filteredGrades = grades
               .where((grade) =>
-                  grade.grade.toLowerCase().contains(query.toLowerCase()))
+              grade.grades.toString().contains(query))
               .toList();
-        }
-      });
+        });
+      }
     });
   }
 
@@ -144,10 +151,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                 return const Center(child: Text("No grades available"));
               } else {
                 final grades =
-                    filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
+                filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
                 return Wrap(
-                  spacing: 10.0, 
-                  runSpacing: 10.0, 
+                  spacing: 10.0,
+                  runSpacing: 10.0,
                   children: grades.map((grade) => GradeCard(grade: grade)).toList(),
                 );
               }
@@ -166,59 +173,54 @@ class GradeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayGrade =
-        grade.grade.length >= 5 ? grade.grade.substring(6) : 'N/A';
+    String displayGrade = grade.grades.toString();
 
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        child: 
-
-         Container(
+        child: Container(
           width: 120,
           height: 120,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF0f5288),
-                    Color(0xFF5A94BD),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0xFFA5D6F2),
-                    offset: Offset(4, 4),
-                  ),
-                ],
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF0f5288),
+                Color(0xFF5A94BD),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0xFFA5D6F2),
+                offset: Offset(4, 4),
               ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubjectPage(grade: displayGrade)),
-                  );
-                },
-                child: SizedBox(
-                  child: Center(
-                    child: Text(
-                      displayGrade,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
+            ],
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SubjectPage(id: grade.id, grade: displayGrade)),
+              );
+            },
+            child: SizedBox(
+              child: Center(
+                child: Text(
+                  displayGrade,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-         
-        
+          ),
+        ),
       ),
     );
   }

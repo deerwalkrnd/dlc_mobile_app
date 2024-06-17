@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
@@ -46,18 +44,18 @@ class _InstructorsPageState extends State<InstructorsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(),
-      body: _futureInstructors == null 
-          ? Center(child: Text("error"))
+      appBar: const TopNavBar(),
+      body: _futureInstructors == null
+          ? const Center(child: Text("error"))
           : FutureBuilder<List<Instructor>>(
               future: _futureInstructors,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No instructors found.'));
+                  return const Center(child: Text('No instructors found.'));
                 } else {
                   final instructors = snapshot.data!;
                   return SingleChildScrollView(
@@ -109,7 +107,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
         return InstructorCard(
-          imagePath: instructor.image_url, 
+          imagePath: instructor.image_url,
           name: instructor.name_en,
           messageUrl: 'mailto:${instructor.email}',
           phoneUrl: 'tel:${instructor.contact_number}',
@@ -118,5 +116,4 @@ class _InstructorsPageState extends State<InstructorsPage> {
       }).toList(),
     );
   }
-
 }

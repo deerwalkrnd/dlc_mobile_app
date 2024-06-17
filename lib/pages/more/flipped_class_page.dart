@@ -1,3 +1,4 @@
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -40,9 +41,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(
-        
-      ),
+      appBar: const TopNavBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -50,15 +49,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Center(
-                child: Text(
-                  'Flipped Class',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    decoration: TextDecoration.none,
-                  ),
-                ),
+                child: Text('Flipped Class', style: AppTextStyles.headline700),
               ),
               const SizedBox(height: 20),
               Padding(
@@ -73,10 +64,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                     child: Text(
                       'Flipped classes, by definition, “is a pedagogical model in which the typical lecture and homework elements of a course are reversed”. DLC, through this portal, aims at promoting flipped classes model across the country whereby students watch the lectures, in the form of short videos, in the home and utilize regular class hours for discussion.\n\n'
                       'Researches across the world have shown that student’s learning has significantly improved when taught in this model as compared to the traditional face-to-face model. We aim at improving the learning of each and every student of Nepal.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      style: AppTextStyles.bodyText300,
                       textAlign: TextAlign.justify,
                     ),
                   ),
@@ -86,15 +74,14 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                 padding: const EdgeInsets.all(10),
                 child: GestureDetector(
                   onTap: () {
-                    _launchURL('https://www.youtube.com/watch?v=${FlippedClassPage.videoID}');
+                    _launchURL(
+                        'https://www.youtube.com/watch?v=${FlippedClassPage.videoID}');
                   },
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
-                      
-                      borderRadius: BorderRadius.circular(3),
-                      color: Colors.black38
-                    ),
+                        borderRadius: BorderRadius.circular(3),
+                        color: Colors.black38),
                     child: Center(
                       child: Image.asset(
                         'assets/images/youtube.png',

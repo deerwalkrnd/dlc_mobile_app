@@ -1,3 +1,4 @@
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -38,20 +39,15 @@ class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(),
-      body: Column(
+      appBar: const TopNavBar(),
+      body: const Column(
         children: [
-          const Padding(padding: EdgeInsets.all(10)),
-          const Center(
-            child: Text(
-              'More',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                decoration: TextDecoration.none,
-              ),
-            ),
+          Padding(padding: EdgeInsets.all(10)),
+          Center(
+            child: Text('More', style: AppTextStyles.headline600),
+          ),
+          SizedBox(
+            height: 5,
           ),
           Wrap(
             runSpacing: 4, //4 multiple better

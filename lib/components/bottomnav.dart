@@ -1,4 +1,4 @@
-import 'package:dlc/main.dart';
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
@@ -20,7 +20,7 @@ class MyBottomNavigationBar extends StatelessWidget {
         ),
       ),
       child: BottomNavigationBar(
-        backgroundColor: MyApp.customColor,
+        backgroundColor: oneBlue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

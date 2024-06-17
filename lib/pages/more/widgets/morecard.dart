@@ -6,11 +6,11 @@ class MoreCard extends StatelessWidget {
   final Widget navigateTo;
 
   const MoreCard({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.title,
     required this.navigateTo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
+import 'package:dlc/pages/unit.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/subject/chapters.dart';
-
+import 'package:dlc/pages/ChapterPage.dart';
 class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
@@ -54,7 +55,7 @@ class SubjectCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ChapterPage(subjectName: subjectName, grade_subject_id: subjectId)),
+          MaterialPageRoute(builder: (context) => UnitPage(subjectName: subjectName, gradeSubjectId: subjectId)),
         );
       },
     );

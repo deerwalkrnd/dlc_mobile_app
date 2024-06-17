@@ -10,8 +10,9 @@ import 'package:dlc/models/grade_subject.dart';
 
 class SubjectPage extends StatefulWidget {
   final String grade;
+  final int id; // Change to int
 
-  const SubjectPage({super.key, required this.grade});
+  const SubjectPage({super.key, required this.grade, required this.id});
 
   @override
   State<SubjectPage> createState() => _SubjectPageState();
@@ -24,7 +25,7 @@ class _SubjectPageState extends State<SubjectPage> {
   @override
   void initState() {
     super.initState();
-    futureSubjects = ApiService().fetchGradeSubjects(widget.grade);
+    futureSubjects = ApiService().fetchGradeSubjects(widget.id); // Pass id here
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -46,7 +47,7 @@ class _SubjectPageState extends State<SubjectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(),
+      appBar: const TopNavBar(),
       body: FutureBuilder<List<Grade_Subject>>(
         future: futureSubjects,
         builder: (context, snapshot) {
@@ -77,7 +78,7 @@ class _SubjectPageState extends State<SubjectPage> {
                     imagePath: subject.subjectImageUrl,
                     subjectName: subject.subjectName,
                     subjectId: subject.id,
-                  )).toList(),
+                  )),
                 ],
               ),
             );
