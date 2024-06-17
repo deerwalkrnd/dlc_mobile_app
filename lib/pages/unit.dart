@@ -77,11 +77,13 @@ class _UnitPageState extends State<UnitPage> {
               const BackButton(
                 color: Colors.white,
               ),
-              SizedBox(width: getScreenWidth(context) / 4),
-              Text(
-                '$subName',
-                style: AppTextStyles.headline800,
-                textAlign: TextAlign.center,
+              
+              Expanded(
+                child: Text(
+                  '$subName',
+                  style: AppTextStyles.headline800,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

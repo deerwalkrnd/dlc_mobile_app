@@ -49,14 +49,14 @@ class _FinalPageState extends State<FinalPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-             Row(
-
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const BackButton(
                   color: Colors.white,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
+               
+                Expanded(
                   child: Text(
                     widget.sub_name_final ?? '',
                     textAlign: TextAlign.center,
@@ -65,7 +65,6 @@ class _FinalPageState extends State<FinalPage> {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
