@@ -1,3 +1,4 @@
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dlc/models/unit.dart';
@@ -6,6 +7,7 @@ import '../components/topnavbar.dart'; // Import the top navigation bar componen
 import '../components/bottomnav.dart'; // Import the bottom navigation bar component here
 
 class FinalPage extends StatefulWidget {
+  final sub_name_final;
   final Unittwo unit;
   final String title;
   final String url;
@@ -15,6 +17,7 @@ class FinalPage extends StatefulWidget {
     required this.unit,
     required this.title,
     required this.url,
+    required this.sub_name_final,
   }) : super(key: key);
 
   @override
@@ -41,34 +44,61 @@ class _FinalPageState extends State<FinalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(), // Use the custom TopNavBar here
+      appBar: const TopNavBar(), // Use the custom TopNavBar here
 
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
+             Row(
+
+              children: [
+                const BackButton(
+                  color: Colors.white,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    widget.sub_name_final ?? '',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.headline800,
                   ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: null,
+                        decoration: const InputDecoration(
+                          hintText: 'Search for the desired topic',
+                          border: InputBorder.none,
+                        ),
+                        onChanged: null,
+                      ),
+                    ),
+                    Icon(Icons.search, color: Colors.black),
+                  ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20.0),
               child: Center(
                 child: Text(
-                  widget.unit.nepaliName,
+                  widget.title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextStyles.headline700,
                 ),
               ),
             ),

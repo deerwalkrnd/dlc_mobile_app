@@ -127,7 +127,7 @@ class _UnitPageState extends State<UnitPage> {
                       return ListView.builder(
                         itemCount: units.length,
                         itemBuilder: (context, index) {
-                          return UnitCard(unit: units[index]);
+                          return UnitCard(subject_name:subName,unit: units[index]);
                         },
                       );
                     } else {

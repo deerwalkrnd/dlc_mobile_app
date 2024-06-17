@@ -9,13 +9,15 @@ import '../../../models/unit.dart';
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
 
-  UnitCard({super.key, required this.unit});
+  var subject_name;
+  UnitCard({super.key, required this.unit, required this.subject_name});
 
   @override
   State<UnitCard> createState() => _UnitCardState();
 }
 
 class _UnitCardState extends State<UnitCard> {
+
   bool _isExpanded = false;
   List<dynamic> _topics = [];
   bool _isLoading = false;
@@ -142,6 +144,7 @@ class _UnitCardState extends State<UnitCard> {
               unit: widget.unit,
               title: topic['title'],
               url: topic['url'],
+              sub_name_final:widget.subject_name
             ),
           ),
         );
