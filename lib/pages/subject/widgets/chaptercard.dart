@@ -1,27 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:dlc/models/unit.dart';
-import 'package:dlc/pages/subject/chaptersone.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
+import '../../../models/unit.dart';
 
-class UnitCard extends StatelessWidget {
+class UnitCard extends StatefulWidget {
   final Unittwo unit;
 
-  const UnitCard({super.key, required this.unit});
+  UnitCard({super.key, required this.unit});
+
+  @override
+  State<UnitCard> createState() => _UnitCardState();
+}
+
+class _UnitCardState extends State<UnitCard> {
+  bool _isExpanded = false;
+  List<dynamic> _topics = [];
+  bool _isLoading = false;
+
+  void _toggleExpand() {
+    if (!_isExpanded) {
+      _fetchTopics();
+    } else {
+      setState(() {
+        _isExpanded = false;
+      });
+    }
+  }
+
+  Future<void> _fetchTopics() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final response = await http.get(Uri.parse('https://dlc-dev.deerwalk.edu.np/api/units/77/chapter'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        _topics = data['data'];
+        _isExpanded = true;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      throw Exception('Failed to load topics');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChapterOnePage(unit: unit),
-            ),
-          );
-        },
+        onTap: _toggleExpand,
         child: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -49,7 +85,7 @@ class UnitCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "Unit ${unit.unitNumber}",
+                        "Unit ${widget.unit.unitNumber}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 28,
@@ -58,7 +94,7 @@ class UnitCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        unit.name,
+                        widget.unit.name,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 20,
@@ -70,10 +106,47 @@ class UnitCard extends StatelessWidget {
                   ),
                 ),
               ),
+              if (_isLoading) CircularProgressIndicator(),
+              if (_isExpanded && !_isLoading)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: _topics.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      dynamic topic = entry.value;
+                      return _buildTopicItem(index, topic);
+                    }).toList(),
+                  ),
+                ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTopicItem(int index, dynamic topic) {
+    return ListTile(
+      title: Text(
+        '${widget.unit.unitNumber}.${index + 1} ${topic['title']}',
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FinalPage(
+              unit: widget.unit,
+              title: topic['title'],
+              url: topic['url'],
+            ),
+          ),
+        );
+      },
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
     );
   }
 }

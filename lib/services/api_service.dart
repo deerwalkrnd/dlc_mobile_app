@@ -85,11 +85,8 @@ class ApiService {
     try {
       final response = await http.get(Uri.parse('$baseUrl/instructor'));
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-        final instructors = jsonData.entries.map((entry) {
-          final instructorData = entry.value as Map<String, dynamic>;
-          return Instructor.fromJson(instructorData);
-        }).toList();
+        final List<dynamic> jsonData = jsonDecode(response.body);
+        final instructors = jsonData.map((data) => Instructor.fromJson(data as Map<String, dynamic>)).toList();
         return instructors;
       } else {
         throw Exception('Failed to load instructors: ${response.statusCode}');

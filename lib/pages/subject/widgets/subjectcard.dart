@@ -1,7 +1,7 @@
 import 'package:dlc/pages/unit.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/subject/chapters.dart';
-import 'package:dlc/pages/ChapterPage.dart';
+import 'package:dlc/pages/yt.dart';
 class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
