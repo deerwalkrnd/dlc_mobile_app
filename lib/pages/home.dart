@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -37,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavBar(),
+      appBar: const TopNavBar(),
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
@@ -55,7 +57,7 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   late Future<List<Grade>> futureGrades;
   List<Grade> filteredGrades = [];
 
@@ -79,8 +81,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       } else {
         futureGrades.then((grades) {
           filteredGrades = grades
-              .where((grade) =>
-              grade.grades.toString().contains(query))
+              .where((grade) => grade.grades.toString().contains(query))
               .toList();
         });
       }
@@ -151,11 +152,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                 return const Center(child: Text("No grades available"));
               } else {
                 final grades =
-                filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
+                    filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
                 return Wrap(
                   spacing: 10.0,
                   runSpacing: 10.0,
-                  children: grades.map((grade) => GradeCard(grade: grade)).toList(),
+                  children:
+                      grades.map((grade) => GradeCard(grade: grade)).toList(),
                 );
               }
             },
@@ -169,7 +171,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 class GradeCard extends StatelessWidget {
   final Grade grade;
 
-  const GradeCard({Key? key, required this.grade}) : super(key: key);
+  const GradeCard({super.key, required this.grade});
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +206,8 @@ class GradeCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SubjectPage(id: grade.id, grade: displayGrade)),
+                    builder: (context) =>
+                        SubjectPage(id: grade.id, grade: displayGrade)),
               );
             },
             child: SizedBox(

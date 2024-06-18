@@ -11,19 +11,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +26,6 @@ class _MyHomePageState extends State<MyHomePage> {
         index: _selectedIndex,
         children: _widgetOptions,
       ),
-      
     );
   }
 }
