@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_const
+
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: unused_import
 import 'package:dlc/models/unit.dart';
 import '../models/GradeSubject.dart';
 import '../components/topnavbar.dart'; // Import the top navigation bar component here
@@ -13,12 +16,12 @@ class FinalPage extends StatefulWidget {
   final String url;
 
   FinalPage({
-    Key? key,
+    super.key,
     required this.unit,
     required this.title,
     required this.url,
     required this.sub_name_final,
-  }) : super(key: key);
+  });
 
   @override
   State<FinalPage> createState() => _FinalPageState();

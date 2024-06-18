@@ -3,7 +3,6 @@ import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/unit.dart';
 import '../models/GradeSubject.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -77,7 +76,6 @@ class _UnitPageState extends State<UnitPage> {
               const BackButton(
                 color: Colors.white,
               ),
-              
               Expanded(
                 child: Text(
                   '$subName',
@@ -101,7 +99,7 @@ class _UnitPageState extends State<UnitPage> {
                   Expanded(
                     child: TextField(
                       controller: null,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Search for the desired topic',
                         border: InputBorder.none,
                       ),
@@ -129,7 +127,8 @@ class _UnitPageState extends State<UnitPage> {
                       return ListView.builder(
                         itemCount: units.length,
                         itemBuilder: (context, index) {
-                          return UnitCard(subject_name:subName,unit: units[index]);
+                          return UnitCard(
+                              subject_name: subName, unit: units[index]);
                         },
                       );
                     } else {
@@ -137,8 +136,6 @@ class _UnitPageState extends State<UnitPage> {
                     }
                   },
                 ),
-
-
               ),
             ),
           ),

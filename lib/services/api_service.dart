@@ -23,7 +23,6 @@ class ApiService {
         throw Exception('Failed to load grades: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching grades: $e');
       throw Exception('Error fetching grades: $e');
     }
   }
@@ -32,39 +31,30 @@ class ApiService {
     try {
       final url = '$baseUrl/grades/$gradeId/subjects';
       final response = await http.get(Uri.parse(url));
-      print('Request URL: $url');
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
-        print('Response JSON: $jsonData');
 
         if (!jsonData.containsKey('data')) {
           throw Exception('Key "data" not found in response');
         }
 
         final subjectsList = jsonData['data'] as List<dynamic>;
-        print('Subjects List: $subjectsList');
 
         final subjects = subjectsList.map((subjectJson) {
           final subjectData = subjectJson as Map<String, dynamic>;
-          print('Subject Data: $subjectData');
 
           final gradeSubject = Grade_Subject.fromJson(subjectData);
-          print('Grade_Subject: $gradeSubject');
 
           return gradeSubject;
         }).toList();
 
-        print('Subjects List: $subjects');
         return subjects;
       } else {
-        print('Error: HTTP status ${response.statusCode}');
-        print('Response body: ${response.body}');
         throw Exception(
             'Failed to load grade subjects: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching grade subjects: $e');
       throw Exception('Error fetching grade subjects: $e');
     }
   }
@@ -92,7 +82,6 @@ class ApiService {
         throw Exception('Failed to load instructors: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching instructors: $e');
       throw Exception('Error fetching instructors: $e');
     }
   }

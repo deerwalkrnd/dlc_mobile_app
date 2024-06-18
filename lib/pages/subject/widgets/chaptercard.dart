@@ -4,8 +4,10 @@ import 'dart:convert';
 
 import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
+// ignore: unused_import
 import '../../../models/unit.dart';
 
+// ignore: must_be_immutable
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
 
