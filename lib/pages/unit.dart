@@ -7,7 +7,9 @@ import '../models/GradeSubject.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
+import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
+
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
@@ -29,7 +31,7 @@ class _UnitPageState extends State<UnitPage> {
   late Future<List<Unittwo>> futureUnits;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomeWidget(),
+    HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
@@ -76,13 +78,15 @@ class _UnitPageState extends State<UnitPage> {
               const BackButton(
                 color: Colors.white,
               ),
-              Expanded(
-                child: Text(
-                  '$subName',
-                  style: AppTextStyles.headline800,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+                 Text(
+                    '$subName',
+                    style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24,
+                    color: Colors.white
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
             ],
           ),
           Padding(
@@ -144,21 +148,6 @@ class _UnitPageState extends State<UnitPage> {
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ),
-    );
-  }
-}
-
-// Placeholder for HomeWidget class, you need to define it appropriately in your code
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Home Widget Placeholder',
-        style: TextStyle(fontSize: 24),
       ),
     );
   }

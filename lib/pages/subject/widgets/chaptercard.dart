@@ -4,10 +4,8 @@ import 'dart:convert';
 
 import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
-// ignore: unused_import
 import '../../../models/unit.dart';
 
-// ignore: must_be_immutable
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
 
@@ -85,7 +83,7 @@ class _UnitCardState extends State<UnitCard> {
             children: [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+                  padding: const EdgeInsets.symmetric(vertical: 40.0),
                   child: Column(
                     children: [
                       Text(
@@ -100,8 +98,9 @@ class _UnitCardState extends State<UnitCard> {
                       Text(
                         widget.unit.name,
                         textAlign: TextAlign.center,
+                        
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),

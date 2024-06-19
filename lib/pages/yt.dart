@@ -53,7 +53,7 @@ class _FinalPageState extends State<FinalPage> {
         child: Column(
           children: [
             Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const BackButton(
                   color: Colors.white,
@@ -63,7 +63,11 @@ class _FinalPageState extends State<FinalPage> {
                   child: Text(
                     widget.sub_name_final ?? '',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.headline800,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      color: Colors.white
+                      ),
                   ),
                 ),
               ],
@@ -95,17 +99,22 @@ class _FinalPageState extends State<FinalPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20, 10,20,10),
               child: Center(
                 child: Text(
                   widget.title,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.headline700,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      color: Colors.white
+                      ),
+                  
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.fromLTRB(10, 5,10,5),
               child: GestureDetector(
                 onTap: () {
                   _launchURL(widget.url);
@@ -133,7 +142,7 @@ class _FinalPageState extends State<FinalPage> {
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ), // Optionally integrate this if needed
+      ),
     );
   }
 }
