@@ -66,11 +66,12 @@ class _UnitPageState extends State<UnitPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const TopNavBar(), 
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: const TopNavBar(), 
 
-      body: Column(
+    body: SingleChildScrollView(
+      child: Column(
         children: [
           Row(
             children: [
@@ -114,43 +115,42 @@ class _UnitPageState extends State<UnitPage> {
               ),
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Center(
-                child: FutureBuilder<List<Unittwo>>(
-                  future: futureUnits,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
-                      List<Unittwo> units = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: units.length,
-                        itemBuilder: (context, index) {
-                          return UnitCard(
-                            subjectName: subName,
-                            unit: units[index],
-                            unitId: units[index].id, 
-                          );
-                        },
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: FutureBuilder<List<Unittwo>>(
+              future: futureUnits,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  List<Unittwo> units = snapshot.data!;
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),  // Disable ListView's own scrolling
+                    shrinkWrap: true,  // Ensure the ListView takes only the required height
+                    itemCount: units.length,
+                    itemBuilder: (context, index) {
+                      return UnitCard(
+                        subjectName: subName,
+                        unit: units[index],
+                        unitId: units[index].id, 
                       );
-                    } else {
-                      return const Center(child: Text('No data found'));
-                    }
-                  },
-                ),
-              ),
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('No data found'));
+                }
+              },
             ),
           ),
         ],
       ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
-    );
+    ),
+    bottomNavigationBar: MyBottomNavigationBar(
+      selectedIndex: _selectedIndex,
+      onItemTapped: _onItemTapped,
+    ),
+  );
   }
 }

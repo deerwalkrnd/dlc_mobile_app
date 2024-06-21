@@ -62,7 +62,7 @@ class _FinalPageState extends State<FinalPage> {
                 Expanded(
                   child: Text(
                     widget.sub_name_final ?? '',
-                    textAlign: TextAlign.center,
+                    
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 24,
@@ -106,7 +106,7 @@ class _FinalPageState extends State<FinalPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 24,
+                      fontSize: 20,
                       color: Colors.white
                       ),
                   
