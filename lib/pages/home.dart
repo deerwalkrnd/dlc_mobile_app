@@ -96,7 +96,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           const Padding(padding: EdgeInsets.all(12.0)),
           const Center(
             child: Text(
-              'What topic do you want to learn?',
+              'What class do you want to join?',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
@@ -120,7 +120,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     child: TextField(
                       controller: _searchController,
                       decoration: const InputDecoration(
-                        hintText: 'Search for the desired topic',
+                        hintText: 'Search for the desired class',
                         border: InputBorder.none,
                       ),
                       onChanged: _filterGrades,

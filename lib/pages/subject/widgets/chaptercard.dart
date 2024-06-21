@@ -8,23 +8,28 @@ import '../../../models/unit.dart';
 
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
+  final String subjectName;
+  final int unitId;
 
-  var subject_name;
-  UnitCard({super.key, required this.unit, required this.subject_name});
+  UnitCard({
+    Key? key,
+    required this.unit,
+    required this.subjectName,
+    required this.unitId,
+  }) : super(key: key);
 
   @override
   State<UnitCard> createState() => _UnitCardState();
 }
 
 class _UnitCardState extends State<UnitCard> {
-
   bool _isExpanded = false;
-  List<dynamic> _topics = [];
+  List<dynamic> _chapters = [];
   bool _isLoading = false;
 
   void _toggleExpand() {
     if (!_isExpanded) {
-      _fetchTopics();
+      _fetchChapters();
     } else {
       setState(() {
         _isExpanded = false;
@@ -32,17 +37,18 @@ class _UnitCardState extends State<UnitCard> {
     }
   }
 
-  Future<void> _fetchTopics() async {
+  Future<void> _fetchChapters() async {
     setState(() {
       _isLoading = true;
     });
 
-    final response = await http.get(Uri.parse('https://dlc-dev.deerwalk.edu.np/api/units/77/chapter'));
+    final response = await http.get(Uri.parse(
+        'https://dlc-dev.deerwalk.edu.np/api/units/${widget.unitId}/chapter'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        _topics = data['data'];
+        _chapters = data['data'];
         _isExpanded = true;
         _isLoading = false;
       });
@@ -50,7 +56,7 @@ class _UnitCardState extends State<UnitCard> {
       setState(() {
         _isLoading = false;
       });
-      throw Exception('Failed to load topics');
+      throw Exception('Failed to load chapters');
     }
   }
 
@@ -98,7 +104,6 @@ class _UnitCardState extends State<UnitCard> {
                       Text(
                         widget.unit.name,
                         textAlign: TextAlign.center,
-                        
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -109,15 +114,15 @@ class _UnitCardState extends State<UnitCard> {
                   ),
                 ),
               ),
-              if (_isLoading) CircularProgressIndicator(),
+              if (_isLoading) const CircularProgressIndicator(),
               if (_isExpanded && !_isLoading)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
-                    children: _topics.asMap().entries.map((entry) {
+                    children: _chapters.asMap().entries.map((entry) {
                       int index = entry.key;
-                      dynamic topic = entry.value;
-                      return _buildTopicItem(index, topic);
+                      dynamic chapter = entry.value;
+                      return _buildChapterItem(index, chapter);
                     }).toList(),
                   ),
                 ),
@@ -128,10 +133,10 @@ class _UnitCardState extends State<UnitCard> {
     );
   }
 
-  Widget _buildTopicItem(int index, dynamic topic) {
+  Widget _buildChapterItem(int index, dynamic chapter) {
     return ListTile(
       title: Text(
-        '${widget.unit.unitNumber}.${index + 1} ${topic['title']}',
+        '${widget.unit.unitNumber}.${index + 1} ${chapter['title']}',
         style: const TextStyle(
           fontSize: 16,
           color: Colors.white,
@@ -143,9 +148,9 @@ class _UnitCardState extends State<UnitCard> {
           MaterialPageRoute(
             builder: (context) => FinalPage(
               unit: widget.unit,
-              title: topic['title'],
-              url: topic['url'],
-              sub_name_final:widget.subject_name
+              title: chapter['title'],
+              url: chapter['url'],
+              sub_name_final: widget.subjectName,
             ),
           ),
         );

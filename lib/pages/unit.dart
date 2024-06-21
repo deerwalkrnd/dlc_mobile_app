@@ -10,16 +10,15 @@ import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
 
-
 class UnitPage extends StatefulWidget {
   final String subjectName;
   final int gradeSubjectId;
 
   const UnitPage({
-    super.key,
+    Key? key,
     required this.subjectName,
     required this.gradeSubjectId,
-  });
+  }) : super(key: key);
 
   @override
   State<UnitPage> createState() => _UnitPageState();
@@ -69,7 +68,7 @@ class _UnitPageState extends State<UnitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TopNavBar(), // Use the custom TopNavBar here
+      appBar: const TopNavBar(), 
 
       body: Column(
         children: [
@@ -78,15 +77,15 @@ class _UnitPageState extends State<UnitPage> {
               const BackButton(
                 color: Colors.white,
               ),
-                 Text(
-                    '$subName',
-                    style: TextStyle(
+              Text(
+                '$subName',
+                style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 24,
                     color: Colors.white
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
           Padding(
@@ -132,7 +131,10 @@ class _UnitPageState extends State<UnitPage> {
                         itemCount: units.length,
                         itemBuilder: (context, index) {
                           return UnitCard(
-                              subject_name: subName, unit: units[index]);
+                            subjectName: subName,
+                            unit: units[index],
+                            unitId: units[index].id, 
+                          );
                         },
                       );
                     } else {
