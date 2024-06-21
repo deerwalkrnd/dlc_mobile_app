@@ -54,7 +54,7 @@ class SubjectCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UnitPage(subjectName: subjectName, gradeSubjectId: subjectId,mainID: mainId, subjectId:subjectId)),
+          MaterialPageRoute(builder: (context) => UnitPage(subjectName: subjectName, gradeSubjectId: subjectId)),
         );
       },
     );

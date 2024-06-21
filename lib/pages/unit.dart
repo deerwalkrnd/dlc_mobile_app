@@ -1,26 +1,23 @@
 import 'dart:convert';
+import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:dlc/constants.dart/constants.dart';
-import 'package:dlc/pages/subject/widgets/chaptercard.dart';
+import '../models/GradeSubject.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
+import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
-import '../models/GradeSubject.dart';
-import 'home.dart';
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
   final int gradeSubjectId;
-  final int mainID;
-  final int subjectId;
+
   const UnitPage({
-    super.key,
+    Key? key,
     required this.subjectName,
     required this.gradeSubjectId,
-    required this.mainID, required  this.subjectId,
-  });
+  }) : super(key: key);
 
   @override
   State<UnitPage> createState() => _UnitPageState();
@@ -30,12 +27,9 @@ class _UnitPageState extends State<UnitPage> {
   var subName;
   int _selectedIndex = 0;
   late Future<List<Unittwo>> futureUnits;
-  final TextEditingController _searchController = TextEditingController();
-  List<Unittwo> _searchResults = [];
-  bool _isSearching = false;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomeWidget(),
+    HomePage(),
     UpdatesPage(),
     MorePage(),
   ];
@@ -66,51 +60,10 @@ class _UnitPageState extends State<UnitPage> {
       ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
       List<Unittwo> units = apiResponse.data;
       units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
+
       return units;
     } else {
       throw Exception('Failed to load units');
-    }
-  }
-
-  Future<List<Unittwo>> fetchSearchResults(String query) async {
-    final response = await http.get(Uri.parse(
-        'https://dlc-dev.deerwalk.edu.np/api/search-chapters?query=$query&subject_id=${widget.mainID}'));
-
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      if (jsonResponse == null || jsonResponse['data'] == null) {
-        print('Search results are null or do not contain data');
-        return [];
-      }
-      ApiResponse apiResponse = ApiResponse.fromJson(jsonResponse);
-      print('Search results: ${apiResponse.data}');
-      return apiResponse.data;
-    } else {
-      print('Failed to load search results');
-      throw Exception('Failed to load search results');
-    }
-  }
-
-  void _onSearchChanged(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        _isSearching = false;
-        _searchResults.clear();
-      });
-    } else {
-      setState(() {
-        _isSearching = true;
-      });
-      fetchSearchResults(query).then((results) {
-        setState(() {
-          _searchResults = results;
-        });
-      }).catchError((error) {
-        print('Error: $error'); // Debug print
-        setState(() {
-          _searchResults = [];
-        });
-      });
     }
   }
 
@@ -118,17 +71,22 @@ class _UnitPageState extends State<UnitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TopNavBar(),
+
       body: Column(
         children: [
           Row(
             children: [
-              const BackButton(color: Colors.white),
-              Expanded(
-                child: Text(
-                  '$subName',
-                  style: AppTextStyles.headline800,
-                  textAlign: TextAlign.center,
+              const BackButton(
+                color: Colors.white,
+              ),
+              Text(
+                '$subName',
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24,
+                    color: Colors.white
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -141,19 +99,19 @@ class _UnitPageState extends State<UnitPage> {
                 borderRadius: BorderRadius.circular(32),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
+              child: const Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
+                      controller: null,
+                      decoration: InputDecoration(
                         hintText: 'Search for the desired topic',
                         border: InputBorder.none,
                       ),
-                      onChanged: _onSearchChanged,
+                      onChanged: null,
                     ),
                   ),
-                  const Icon(Icons.search, color: Colors.black),
+                  Icon(Icons.search, color: Colors.black),
                 ],
               ),
             ),
@@ -170,12 +128,15 @@ class _UnitPageState extends State<UnitPage> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      List<Unittwo> units = _isSearching ? _searchResults : snapshot.data!;
+                      List<Unittwo> units = snapshot.data!;
                       return ListView.builder(
                         itemCount: units.length,
                         itemBuilder: (context, index) {
                           return UnitCard(
-                              subject_name: subName, unit: units[index]);
+                            subjectName: subName,
+                            unit: units[index],
+                            unitId: units[index].id, subject_name: subName,
+                          );
                         },
                       );
                     } else {
