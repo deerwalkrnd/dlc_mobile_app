@@ -1,22 +1,25 @@
 import 'dart:convert';
-import 'package:dlc/constants.dart/constants.dart';
-import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/GradeSubject.dart';
+import 'package:dlc/constants.dart/constants.dart';
+import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
+import '../models/GradeSubject.dart';
+import 'home.dart';
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
   final int gradeSubjectId;
-
+  final int mainID;
+  final int subjectId;
   const UnitPage({
     super.key,
     required this.subjectName,
     required this.gradeSubjectId,
+    required this.mainID, required  this.subjectId,
   });
 
   @override
@@ -27,6 +30,9 @@ class _UnitPageState extends State<UnitPage> {
   var subName;
   int _selectedIndex = 0;
   late Future<List<Unittwo>> futureUnits;
+  final TextEditingController _searchController = TextEditingController();
+  List<Unittwo> _searchResults = [];
+  bool _isSearching = false;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeWidget(),
@@ -58,24 +64,65 @@ class _UnitPageState extends State<UnitPage> {
 
     if (response.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
-      return apiResponse.data;
+      List<Unittwo> units = apiResponse.data;
+      units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
+      return units;
     } else {
       throw Exception('Failed to load units');
+    }
+  }
+
+  Future<List<Unittwo>> fetchSearchResults(String query) async {
+    final response = await http.get(Uri.parse(
+        'https://dlc-dev.deerwalk.edu.np/api/search-chapters?query=$query&subject_id=${widget.mainID}'));
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse == null || jsonResponse['data'] == null) {
+        print('Search results are null or do not contain data');
+        return [];
+      }
+      ApiResponse apiResponse = ApiResponse.fromJson(jsonResponse);
+      print('Search results: ${apiResponse.data}');
+      return apiResponse.data;
+    } else {
+      print('Failed to load search results');
+      throw Exception('Failed to load search results');
+    }
+  }
+
+  void _onSearchChanged(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        _isSearching = false;
+        _searchResults.clear();
+      });
+    } else {
+      setState(() {
+        _isSearching = true;
+      });
+      fetchSearchResults(query).then((results) {
+        setState(() {
+          _searchResults = results;
+        });
+      }).catchError((error) {
+        print('Error: $error'); // Debug print
+        setState(() {
+          _searchResults = [];
+        });
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TopNavBar(), // Use the custom TopNavBar here
-
+      appBar: const TopNavBar(),
       body: Column(
         children: [
           Row(
             children: [
-              const BackButton(
-                color: Colors.white,
-              ),
+              const BackButton(color: Colors.white),
               Expanded(
                 child: Text(
                   '$subName',
@@ -94,19 +141,19 @@ class _UnitPageState extends State<UnitPage> {
                 borderRadius: BorderRadius.circular(32),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: const Row(
+              child: Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: null,
-                      decoration: InputDecoration(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
                         hintText: 'Search for the desired topic',
                         border: InputBorder.none,
                       ),
-                      onChanged: null,
+                      onChanged: _onSearchChanged,
                     ),
                   ),
-                  Icon(Icons.search, color: Colors.black),
+                  const Icon(Icons.search, color: Colors.black),
                 ],
               ),
             ),
@@ -123,7 +170,7 @@ class _UnitPageState extends State<UnitPage> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
-                      List<Unittwo> units = snapshot.data!;
+                      List<Unittwo> units = _isSearching ? _searchResults : snapshot.data!;
                       return ListView.builder(
                         itemCount: units.length,
                         itemBuilder: (context, index) {
@@ -144,21 +191,6 @@ class _UnitPageState extends State<UnitPage> {
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ),
-    );
-  }
-}
-
-// Placeholder for HomeWidget class, you need to define it appropriately in your code
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Home Widget Placeholder',
-        style: TextStyle(fontSize: 24),
       ),
     );
   }

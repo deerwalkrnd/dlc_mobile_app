@@ -78,6 +78,7 @@ class _SubjectPageState extends State<SubjectPage> {
                     imagePath: subject.subjectImageUrl,
                     subjectName: subject.subjectName,
                     subjectId: subject.id,
+                    mainId: widget.id
                   )),
                 ],
               ),

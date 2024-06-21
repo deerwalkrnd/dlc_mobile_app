@@ -8,6 +8,7 @@ import 'package:dlc/pages/more.dart';
 import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/grade.dart';
 import 'package:dlc/pages/subject/subject.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -57,7 +58,6 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  final TextEditingController _searchController = TextEditingController();
   late Future<List<Grade>> futureGrades;
   List<Grade> filteredGrades = [];
 
@@ -72,74 +72,24 @@ class _HomeWidgetState extends State<HomeWidget> {
     });
   }
 
-  void _filterGrades(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        futureGrades.then((grades) {
-          filteredGrades = grades;
-        });
-      } else {
-        futureGrades.then((grades) {
-          filteredGrades = grades
-              .where((grade) => grade.grades.toString().contains(query))
-              .toList();
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
           const Padding(padding: EdgeInsets.all(12.0)),
-          const Center(
-            child: Text(
-              'What topic do you want to learn?',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                decoration: TextDecoration.none,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          Center(
             child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search for the desired topic',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: _filterGrades,
-                    ),
-                  ),
-                  const Icon(Icons.search, color: Colors.black),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 15),
-            child: const Text(
-              "Choose Your Class",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.white),
-            ),
+                margin: const EdgeInsets.only(top: 15),
+                child: Text(AppLocalizations.of(context)!.helloWorld))
+            // const Text(
+            //   "Choose Your Class",
+            //   style: TextStyle(
+            //       fontWeight: FontWeight.w500,
+            //       fontSize: 22,
+            //       color: Colors.white),
+            // ),
+            ,
           ),
           FutureBuilder<List<Grade>>(
             future: futureGrades,
@@ -156,8 +106,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                 return Wrap(
                   spacing: 10.0,
                   runSpacing: 10.0,
-                  children:
-                      grades.map((grade) => GradeCard(grade: grade)).toList(),
+                  children: grades
+                      .map((grade) => GradeCard(
+                            grade: grade,
+                          ))
+                      .toList(),
                 );
               }
             },

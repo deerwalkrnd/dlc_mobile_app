@@ -35,6 +35,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
   }
 
   Future<void> _launchURL(String url) async {
+    // ignore: deprecated_member_use
     if (!await launch(url)) throw 'Could not launch $url';
   }
 

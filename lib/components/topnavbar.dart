@@ -3,9 +3,11 @@ import 'package:dlc/main.dart';
 import 'package:dlc/models/dropdown_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
-  const TopNavBar();
+  const TopNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
     final List<String> items = ['Nepali', 'English'];
 
     return Container(
+
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -80,6 +83,8 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                     }).toList(),
                     onChanged: (newValue) {
                       dropdownState.value = newValue!;
+                      AppLocalizations.of(context)!.test;
+
                     },
                   ),
                 ),

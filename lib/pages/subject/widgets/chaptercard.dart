@@ -39,7 +39,7 @@ class _UnitCardState extends State<UnitCard> {
       _isLoading = true;
     });
 
-    final response = await http.get(Uri.parse('https://dlc-dev.deerwalk.edu.np/api/units/77/chapter'));
+    final response = await http.get(Uri.parse('https://dlc-dev.deerwalk.edu.np/api/units/{$widget.unit}/chapter'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
