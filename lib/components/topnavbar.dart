@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TopNavBar({super.key});
 
@@ -16,7 +15,6 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
     final List<String> items = ['Nepali', 'English'];
 
     return Container(
-
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -36,8 +34,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  constraints:
-                      const BoxConstraints(maxHeight: 150, maxWidth: 160),
+                  constraints: const BoxConstraints(maxHeight: 150, maxWidth: 160),
                   child: Image.asset(
                     'assets/images/deerwalklearning.png',
                     fit: BoxFit.contain,
@@ -69,8 +66,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     value: dropdownState.value, // Use dropdownState.value
                     iconSize: 0,
                     dropdownColor: oneBlue,
@@ -83,8 +79,6 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                     }).toList(),
                     onChanged: (newValue) {
                       dropdownState.value = newValue!;
-                      AppLocalizations.of(context)!.test;
-
                     },
                   ),
                 ),

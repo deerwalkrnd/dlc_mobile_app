@@ -27,7 +27,7 @@ class GradeSubject {
 class Unittwo {
   final int id;
   final GradeSubject gradeSubject;
-  final String name;
+  String name;
   final String nepaliName;
   final int unitNumber;
 

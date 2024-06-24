@@ -8,6 +8,8 @@ import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
+import 'package:provider/provider.dart';
+import 'package:dlc/models/dropdown_state.dart';
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
@@ -26,7 +28,8 @@ class UnitPage extends StatefulWidget {
 class _UnitPageState extends State<UnitPage> {
   var subName;
   int _selectedIndex = 0;
-  late Future<List<Unittwo>> futureUnits;
+   late Future<List<Unittwo>> futureUnits;
+  String selectedLanguage = 'English';
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -37,7 +40,8 @@ class _UnitPageState extends State<UnitPage> {
   @override
   void initState() {
     super.initState();
-    futureUnits = fetchUnits();
+    selectedLanguage = Provider.of<DropdownState>(context, listen: false).value;
+    futureUnits = fetchUnits(selectedLanguage);
     subName = widget.subjectName;
   }
 
@@ -52,13 +56,21 @@ class _UnitPageState extends State<UnitPage> {
     );
   }
 
-  Future<List<Unittwo>> fetchUnits() async {
+  Future<List<Unittwo>> fetchUnits(String language) async {
     final response = await http.get(Uri.parse(
         'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
 
     if (response.statusCode == 200) {
       ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
       List<Unittwo> units = apiResponse.data;
+
+      units = units.map((unit) {
+        if (language == 'Nepali') {
+          unit.name = unit.nepaliName;
+        }
+        return unit;
+      }).toList();
+
       units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
 
       return units;
@@ -71,7 +83,6 @@ class _UnitPageState extends State<UnitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TopNavBar(),
-
       body: Column(
         children: [
           Row(
@@ -84,8 +95,7 @@ class _UnitPageState extends State<UnitPage> {
                 style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 24,
-                    color: Colors.white
-                ),
+                    color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -135,7 +145,8 @@ class _UnitPageState extends State<UnitPage> {
                           return UnitCard(
                             subjectName: subName,
                             unit: units[index],
-                            unitId: units[index].id, subject_name: subName,
+                            unitId: units[index].id,
+                            selectedLanguage: selectedLanguage,
                           );
                         },
                       );

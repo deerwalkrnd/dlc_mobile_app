@@ -10,12 +10,14 @@ class UnitCard extends StatefulWidget {
   final Unittwo unit;
   final String subjectName;
   final int unitId;
+  final String selectedLanguage;
 
   UnitCard({
     Key? key,
     required this.unit,
     required this.subjectName,
-    required this.unitId, required subject_name,
+    required this.unitId,
+    required this.selectedLanguage,
   }) : super(key: key);
 
   @override
