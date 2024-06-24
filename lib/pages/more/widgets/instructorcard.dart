@@ -6,7 +6,7 @@ class InstructorCard extends StatelessWidget {
   final String name;
   final String messageUrl;
   final String phoneUrl;
-  final String linkedInUrl;
+  // final String linkedInUrl;
 
   const InstructorCard({
     super.key,
@@ -14,7 +14,7 @@ class InstructorCard extends StatelessWidget {
     required this.name,
     required this.messageUrl,
     required this.phoneUrl,
-    required this.linkedInUrl,
+    // required this.linkedInUrl,
   });
 
   @override
@@ -40,7 +40,7 @@ class InstructorCard extends StatelessWidget {
           IconRow(
             messageUrl: messageUrl,
             phoneUrl: phoneUrl,
-            linkedInUrl: linkedInUrl,
+            // linkedInUrl: linkedInUrl,
           ),
           const Padding(padding: EdgeInsets.only(bottom: 20)),
         ],

@@ -26,6 +26,8 @@ class UnitPage extends StatefulWidget {
 
 class _UnitPageState extends State<UnitPage> {
   var subName;
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
   int _selectedIndex = 0;
   late Future<List<Unittwo>> futureUnits;
 
@@ -54,103 +56,132 @@ class _UnitPageState extends State<UnitPage> {
   }
 
   Future<List<Unittwo>> fetchUnits() async {
-    final response = await http.get(Uri.parse(
-        'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
+   final response = await http.get(Uri.parse(
+      'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
 
-    if (response.statusCode == 200) {
-      ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
-      return apiResponse.data;
+  if (response.statusCode == 200) {
+    ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
+    List<Unittwo> units = apiResponse.data;
+    
+    // Sort units based on unit number
+    units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
+    
+    return units;
+  } else {
+    throw Exception('Failed to load units');
+  }
+  }
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  List<Unittwo> filterUnits(List<Unittwo> units) {
+    if (searchQuery.isEmpty) {
+      return units;
     } else {
-      throw Exception('Failed to load units');
+      return units.where((unit) {
+        return unit.name.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
     }
   }
 
   @override
 Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: const TopNavBar(), 
-
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const BackButton(
-                color: Colors.white,
-              ),
-              Text(
-                '$subName',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Colors.white
+    return Scaffold(
+      appBar: const TopNavBar(), 
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const BackButton(
+                  color: Colors.white,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: const Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: null,
-                      decoration: InputDecoration(
-                        hintText: 'Search for the desired topic',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: null,
-                    ),
+                Text(
+                  '$subName',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      color: Colors.white
                   ),
-                  Icon(Icons.search, color: Colors.black),
-                ],
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search for the desired topic',
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchQuery = value;
+                          });
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.search, color: Colors.black),
+                      onPressed: () {
+                        // Perform search action if needed
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: FutureBuilder<List<Unittwo>>(
-              future: futureUnits,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  List<Unittwo> units = snapshot.data!;
-                  return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),  // Disable ListView's own scrolling
-                    shrinkWrap: true,  // Ensure the ListView takes only the required height
-                    itemCount: units.length,
-                    itemBuilder: (context, index) {
-                      return UnitCard(
-                        subjectName: subName,
-                        unit: units[index],
-                        unitId: units[index].id, 
-                      );
-                    },
-                  );
-                } else {
-                  return const Center(child: Text('No data found'));
-                }
-              },
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FutureBuilder<List<Unittwo>>(
+                future: futureUnits,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    List<Unittwo> units = snapshot.data!;
+                    units = filterUnits(units); // Apply search filter
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),  // Disable ListView's own scrolling
+                      shrinkWrap: true,  // Ensure the ListView takes only the required height
+                      itemCount: units.length,
+                      itemBuilder: (context, index) {
+                        return UnitCard(
+                          subjectName: subName,
+                          unit: units[index],
+                          unitId: units[index].id, 
+                          searchQuery: searchQuery, 
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No data found'));
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-    bottomNavigationBar: MyBottomNavigationBar(
-      selectedIndex: _selectedIndex,
-      onItemTapped: _onItemTapped,
-    ),
-  );
+      bottomNavigationBar: MyBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
   }
 }

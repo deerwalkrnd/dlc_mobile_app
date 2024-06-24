@@ -16,16 +16,17 @@ class UnitCard extends StatefulWidget {
     required this.unit,
     required this.subjectName,
     required this.unitId,
+    required String searchQuery
   }) : super(key: key);
 
   @override
   State<UnitCard> createState() => _UnitCardState();
 }
-
 class _UnitCardState extends State<UnitCard> {
   bool _isExpanded = false;
   List<dynamic> _chapters = [];
   bool _isLoading = false;
+  String searchQuery = '';
 
   void _toggleExpand() {
     if (!_isExpanded) {
@@ -57,6 +58,16 @@ class _UnitCardState extends State<UnitCard> {
         _isLoading = false;
       });
       throw Exception('Failed to load chapters');
+    }
+  }
+
+  List<dynamic> filterChapters() {
+    if (searchQuery.isEmpty) {
+      return _chapters;
+    } else {
+      return _chapters.where((chapter) {
+        return chapter['title'].toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
     }
   }
 
@@ -119,10 +130,8 @@ class _UnitCardState extends State<UnitCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
-                    children: _chapters.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      dynamic chapter = entry.value;
-                      return _buildChapterItem(index, chapter);
+                    children: filterChapters().map((chapter) {
+                      return _buildChapterItem(chapter);
                     }).toList(),
                   ),
                 ),
@@ -133,10 +142,10 @@ class _UnitCardState extends State<UnitCard> {
     );
   }
 
-  Widget _buildChapterItem(int index, dynamic chapter) {
+  Widget _buildChapterItem(dynamic chapter) {
     return ListTile(
       title: Text(
-        '${widget.unit.unitNumber}.${index + 1} ${chapter['title']}',
+        '${widget.unit.unitNumber}.${_chapters.indexOf(chapter) + 1} ${chapter['title']}',
         style: const TextStyle(
           fontSize: 16,
           color: Colors.white,

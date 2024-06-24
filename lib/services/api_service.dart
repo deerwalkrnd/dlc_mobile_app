@@ -59,29 +59,37 @@ class ApiService {
     }
   }
 
-  Future<ApiResponse> fetchUnits() async {
-    final response = await http.get(Uri.parse('https://dlc-dev.deerwalk.edu.np/api/subjects/1/unit'));
+  Future<List<Unittwo>> fetchUnits() async {
+  final response = await http.get(Uri.parse(
+      'https://dlc-dev.deerwalk.edu.np/api/subjects/1/unit'));
 
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
-      return ApiResponse.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response, throw an exception
-      throw Exception('Failed to load units');
-    }
+  if (response.statusCode == 200) {
+    ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
+    List<Unittwo> units = apiResponse.data;
+    
+    // Sort units based on unit number
+    units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
+    print(units);
+    return units;
+  } else {
+    throw Exception('Failed to load units');
   }
+}
 
-  Future<List<Instructor>> fetchInstructors() async {
+ Future<List<Instructor>> fetchInstructors() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/instructor'));
       if (response.statusCode == 200) {
-        final List<dynamic> jsonData = jsonDecode(response.body);
-        final instructors = jsonData.map((data) => Instructor.fromJson(data as Map<String, dynamic>)).toList();
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        final List<dynamic> instructorList = jsonData['data'];
+        print(instructorList);
+        final instructors = instructorList.map((data) => Instructor.fromJson(data)).toList();
         return instructors;
       } else {
         throw Exception('Failed to load instructors: ${response.statusCode}');
       }
     } catch (e) {
+      print('Error fetching instructors: $e');
       throw Exception('Error fetching instructors: $e');
     }
   }

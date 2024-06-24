@@ -3,8 +3,9 @@ class Unit {
   final String np;
   final int grade_subject_id;
   final int id;
+  final int unit_number;
 
-  Unit({required this.en, required this.np, required this.id,required this.grade_subject_id});
+  Unit({required this.en, required this.np, required this.id,required this.grade_subject_id, required this.unit_number});
 
   factory Unit.fromJson(Map<String, dynamic> json) {
     return Unit(
@@ -12,11 +13,12 @@ class Unit {
       np: json['np'],
       grade_subject_id: json['grade_subject_id'] as int,
       id: json['id'] as int,
+      unit_number:json['unitnumber'] as int,
     );
   }
 
   String toString() {
-    return 'Unit(en: $en, np: $np, grade_subject_id: $grade_subject_id, id:$id)';
+    return 'Unit(en: $en, np: $np, grade_subject_id: $grade_subject_id, id:$id, unitnumber: $unit_number)';
   }
 
 }

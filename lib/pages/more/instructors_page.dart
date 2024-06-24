@@ -107,11 +107,11 @@ class _InstructorsPageState extends State<InstructorsPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
         return InstructorCard(
-          imagePath: instructor.image_url,
-          name: instructor.name_en,
+          imagePath: instructor.imageUrl,
+          name: instructor.name,
           messageUrl: 'mailto:${instructor.email}',
-          phoneUrl: 'tel:${instructor.contact_number}',
-          linkedInUrl: instructor.linkedin_url ?? '',
+          phoneUrl: 'tel:${instructor.contact}',
+          // linkedInUrl: instructor.linkedin_url ?? '',
         );
       }).toList(),
     );
