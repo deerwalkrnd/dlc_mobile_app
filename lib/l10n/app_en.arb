@@ -13,6 +13,14 @@
   "grade_10": "10",
   "grade_11": "11",
   "chooseYourClass": "Choose Your Class",
-  "whatClassJoin": "What class do you want to join?"
-
+  "choose_your_subject":"Choose Your Subject",
+  "whatClassJoin": "What class do you want to join?",
+  "subject_science": "Science",
+  "subject_mathematics": "Mathematics",
+  "subject_english": "English",
+  "subject_nepali": "Nepali",
+  "subject_social_studies": "Social Studies",
+  "subject_physics": "Physics",
+  "subject_chemistry":"Chemistry",
+  "subject_zoology":"Zoology"
 }

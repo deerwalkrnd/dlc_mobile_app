@@ -7,10 +7,11 @@ import 'package:dlc/pages/more.dart';
 import 'package:dlc/pages/subject/widgets/subjectcard.dart';
 import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/grade_subject.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SubjectPage extends StatefulWidget {
   final String grade;
-  final int id; // Change to int
+  final int id;
 
   const SubjectPage({super.key, required this.grade, required this.id});
 
@@ -25,7 +26,7 @@ class _SubjectPageState extends State<SubjectPage> {
   @override
   void initState() {
     super.initState();
-    futureSubjects = ApiService().fetchGradeSubjects(widget.id); // Pass id here
+    futureSubjects = ApiService().fetchGradeSubjects(widget.id);
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -63,10 +64,10 @@ class _SubjectPageState extends State<SubjectPage> {
               child: Column(
                 children: [
                   const Padding(padding: EdgeInsets.all(12)),
-                  const Center(
+                  Center(
                     child: Text(
-                      'Choose Your Subject',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.choose_your_subject,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -74,11 +75,43 @@ class _SubjectPageState extends State<SubjectPage> {
                       ),
                     ),
                   ),
-                  ...subjects.map((subject) => SubjectCard(
-                    imagePath: subject.subjectImageUrl,
-                    subjectName: subject.subjectName,
-                    subjectId: subject.id, mainId: widget.id,
-                  )),
+                  ...subjects.map((subject) {
+                    String subjectName;
+                    switch (subject.subjectName) {
+                      case 'Science':
+                        subjectName = AppLocalizations.of(context)!.subject_science;
+                        break;
+                      case 'Mathematics':
+                        subjectName = AppLocalizations.of(context)!.subject_mathematics;
+                        break;
+                      case 'English':
+                        subjectName = AppLocalizations.of(context)!.subject_english;
+                        break;
+                      case 'Nepali':
+                        subjectName = AppLocalizations.of(context)!.subject_nepali;
+                        break;
+                      case 'Social Studies':
+                        subjectName = AppLocalizations.of(context)!.subject_social_studies;
+                        break;
+                      case 'Physics':
+                        subjectName = AppLocalizations.of(context)!.subject_physics;
+                        break;
+                      case 'Chemistry':
+                        subjectName = AppLocalizations.of(context)!.subject_chemistry;
+                        break;
+                      case 'Zoology':
+                        subjectName = AppLocalizations.of(context)!.subject_zoology;
+                        break;
+                      default:
+                        subjectName = subject.subjectName;
+                    }
+                    return SubjectCard(
+                      imagePath: subject.subjectImageUrl,
+                      subjectName: subjectName,
+                      subjectId: subject.id,
+                      mainId: widget.id,
+                    );
+                  }).toList(),
                 ],
               ),
             );

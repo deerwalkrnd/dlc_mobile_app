@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
     final localeNotifier = Provider.of<LocaleNotifier>(context);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: oneBlue),
       locale: localeNotifier.locale,
       localizationsDelegates: const [

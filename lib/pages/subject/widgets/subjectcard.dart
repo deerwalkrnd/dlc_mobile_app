@@ -1,5 +1,6 @@
-import 'package:dlc/pages/unit.dart';
 import 'package:flutter/material.dart';
+import 'package:dlc/pages/unit.dart';
+
 class SubjectCard extends StatelessWidget {
   final String imagePath;
   final String subjectName;
@@ -10,7 +11,8 @@ class SubjectCard extends StatelessWidget {
     super.key,
     required this.imagePath,
     required this.subjectName,
-    required this.subjectId, required  this.mainId,
+    required this.subjectId,
+    required this.mainId,
   });
 
   @override
