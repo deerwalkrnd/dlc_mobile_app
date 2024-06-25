@@ -1,0 +1,17 @@
+{
+  "@@locale": "ne",
+  "grades": "कक्षा",
+  "grade_1": "१",
+  "grade_2": "२",
+  "grade_3": "३",
+  "grade_4": "४",
+  "grade_5": "५",
+  "grade_6": "६",
+  "grade_7": "७",
+  "grade_8": "८",
+  "grade_9": "९",
+  "grade_10": "१०",
+  "grade_11": "११",
+  "chooseYourClass": "तपाईंको कक्षा छान्नुहोस्",
+  "whatClassJoin": "तपाईं कुन कक्षा सामेल हुन चाहनुहुन्छ?"
+}

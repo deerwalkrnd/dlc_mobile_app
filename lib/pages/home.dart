@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -8,6 +6,7 @@ import 'package:dlc/pages/more.dart';
 import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/grade.dart';
 import 'package:dlc/pages/subject/subject.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -94,10 +93,10 @@ class _HomeWidgetState extends State<HomeWidget> {
       child: Column(
         children: [
           const Padding(padding: EdgeInsets.all(12.0)),
-          const Center(
+          Center(
             child: Text(
-              'What class do you want to join?',
-              style: TextStyle(
+              AppLocalizations.of(context)!.whatClassJoin,
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
@@ -133,9 +132,9 @@ class _HomeWidgetState extends State<HomeWidget> {
           ),
           Container(
             margin: const EdgeInsets.only(top: 15),
-            child: const Text(
-              "Choose Your Class",
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context)!.chooseYourClass,
+              style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 22,
                   color: Colors.white),
@@ -175,7 +174,8 @@ class GradeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayGrade = grade.grades.toString();
+    // Get localized grade
+    String displayGrade = _getLocalizedGrade(context, grade.grades);
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -206,8 +206,7 @@ class GradeCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        SubjectPage(id: grade.id, grade: displayGrade)),
+                    builder: (context) => SubjectPage(id: grade.id, grade: displayGrade)),
               );
             },
             child: SizedBox(
@@ -227,4 +226,34 @@ class GradeCard extends StatelessWidget {
       ),
     );
   }
+
+  String _getLocalizedGrade(BuildContext context, int grade) {
+    switch (grade) {
+      case 1:
+        return AppLocalizations.of(context)!.grade_1;
+      case 2:
+        return AppLocalizations.of(context)!.grade_2;
+      case 3:
+        return AppLocalizations.of(context)!.grade_3;
+      case 4:
+        return AppLocalizations.of(context)!.grade_4;
+      case 5:
+        return AppLocalizations.of(context)!.grade_5;
+      case 6:
+        return AppLocalizations.of(context)!.grade_6;
+      case 7:
+        return AppLocalizations.of(context)!.grade_7;
+      case 8:
+        return AppLocalizations.of(context)!.grade_8;
+      case 9:
+        return AppLocalizations.of(context)!.grade_9;
+      case 10:
+        return AppLocalizations.of(context)!.grade_10;
+      case 11:
+        return AppLocalizations.of(context)!.grade_11;
+      default:
+        return grade.toString();
+    }
+  }
 }
+

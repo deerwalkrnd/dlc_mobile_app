@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'localeModifier.dart';
+
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TopNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final dropdownState = Provider.of<DropdownState>(context);
-
     final List<String> items = ['Nepali', 'English'];
 
     return Container(
@@ -78,7 +79,16 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
                       );
                     }).toList(),
                     onChanged: (newValue) {
-                      dropdownState.value = newValue!;
+                      if (newValue != null) {
+                        dropdownState.value = newValue;
+                        if (newValue == 'Nepali') {
+                          Provider.of<LocaleNotifier>(context, listen: false)
+                              .setLocale(const Locale('ne'));
+                        } else {
+                          Provider.of<LocaleNotifier>(context, listen: false)
+                              .setLocale(const Locale('en'));
+                        }
+                      }
                     },
                   ),
                 ),

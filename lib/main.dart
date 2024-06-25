@@ -1,16 +1,22 @@
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/pages/home.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 import 'package:dlc/models/dropdown_state.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'components/localeModifier.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => DropdownState(),
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DropdownState()),
+        ChangeNotifierProvider(create: (_) => LocaleNotifier()),
+      ],
+      child: MyApp(),
     ),
   );
 }
@@ -20,26 +26,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String appTitle = 'Deerwalk Learning Center';
-    return MaterialApp(
+    final localeNotifier = Provider.of<LocaleNotifier>(context);
 
-      theme: ThemeData(
-        scaffoldBackgroundColor: oneBlue,
-      ),
-      debugShowCheckedModeBanner: false,
-      title: appTitle,
-      locale: const Locale('es'),
+    return MaterialApp(
+      theme: ThemeData(scaffoldBackgroundColor: oneBlue),
+      locale: localeNotifier.locale,
       localizationsDelegates: const [
-        AppLocalizations.delegate, // Add this line
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('es'), // Spanish
-      ],
-      home: const HomePage(),
+      supportedLocales: L10n.all,
+      home:  HomePage(),
     );
   }
+}
+
+class L10n {
+  static final all = [
+    const Locale('en'),
+    const Locale('ne'),
+  ];
 }
