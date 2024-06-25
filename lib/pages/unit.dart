@@ -56,40 +56,53 @@ class _UnitPageState extends State<UnitPage> {
   }
 
   Future<List<Unittwo>> fetchUnits() async {
-   final response = await http.get(Uri.parse(
-      'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
+    final response = await http.get(Uri.parse(
+        'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
 
-  if (response.statusCode == 200) {
-    ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
-    List<Unittwo> units = apiResponse.data;
-    
-    // Sort units based on unit number
-    units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
-    
-    return units;
-  } else {
-    throw Exception('Failed to load units');
+    if (response.statusCode == 200) {
+      ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
+      List<Unittwo> units = apiResponse.data;
+
+      units.sort((a, b) => a.unitNumber.compareTo(b.unitNumber));
+
+      return units;
+    } else {
+      throw Exception('Failed to load units');
+    }
   }
-  }
+
   void dispose() {
     searchController.dispose();
     super.dispose();
   }
 
-  List<Unittwo> filterUnits(List<Unittwo> units) {
-    if (searchQuery.isEmpty) {
-      return units;
+  Future<List<Unittwo>> searchUnitsWithChapters() async {
+    final response = await http.get(Uri.parse(
+        'https://dlc-dev.deerwalk.edu.np/api/search-chapters?query=$searchQuery&subject_id=${widget.gradeSubjectId}'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      Map<int, List<dynamic>> unitChaptersMap = {};
+
+      for (var chapter in data['data']) {
+        var unitId = chapter['unit']['id'];
+        if (!unitChaptersMap.containsKey(unitId)) {
+          unitChaptersMap[unitId] = [];
+        }
+        unitChaptersMap[unitId]!.add(chapter);
+      }
+
+      final responseUnits = await fetchUnits();
+      return responseUnits.where((unit) => unitChaptersMap.containsKey(unit.id)).toList();
     } else {
-      return units.where((unit) {
-        return unit.name.toLowerCase().contains(searchQuery.toLowerCase());
-      }).toList();
+      throw Exception('Failed to search chapters');
     }
   }
 
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TopNavBar(), 
+      appBar: const TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -103,8 +116,7 @@ Widget build(BuildContext context) {
                   style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 24,
-                      color: Colors.white
-                  ),
+                      color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -137,7 +149,9 @@ Widget build(BuildContext context) {
                     IconButton(
                       icon: Icon(Icons.search, color: Colors.black),
                       onPressed: () {
-                        // Perform search action if needed
+                        setState(() {
+                          // Trigger search
+                        });
                       },
                     ),
                   ],
@@ -147,7 +161,7 @@ Widget build(BuildContext context) {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: FutureBuilder<List<Unittwo>>(
-                future: futureUnits,
+                future: searchQuery.isEmpty ? futureUnits : searchUnitsWithChapters(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -155,17 +169,16 @@ Widget build(BuildContext context) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
                     List<Unittwo> units = snapshot.data!;
-                    units = filterUnits(units); // Apply search filter
                     return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),  // Disable ListView's own scrolling
-                      shrinkWrap: true,  // Ensure the ListView takes only the required height
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemCount: units.length,
                       itemBuilder: (context, index) {
                         return UnitCard(
                           subjectName: subName,
                           unit: units[index],
-                          unitId: units[index].id, 
-                          searchQuery: searchQuery, 
+                          unitId: units[index].id,
+                          searchQuery: searchQuery,
                         );
                       },
                     );
