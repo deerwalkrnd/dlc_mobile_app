@@ -4,20 +4,23 @@ import 'dart:convert';
 
 import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
+import '../../../models/unit.dart';
 
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
   final String subjectName;
   final int unitId;
+  final String searchQuery;
   final String selectedLanguage;
 
   UnitCard({
-    super.key,
+    Key? key,
     required this.unit,
     required this.subjectName,
     required this.unitId,
+    required this.searchQuery,
     required this.selectedLanguage,
-  });
+  }) : super(key: key);
 
   @override
   State<UnitCard> createState() => _UnitCardState();
@@ -28,9 +31,17 @@ class _UnitCardState extends State<UnitCard> {
   List<dynamic> _chapters = [];
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.searchQuery.isNotEmpty) {
+      _fetchChapters(expand: true);
+    }
+  }
+
   void _toggleExpand() {
     if (!_isExpanded) {
-      _fetchChapters();
+      _fetchChapters(expand: true);
     } else {
       setState(() {
         _isExpanded = false;
@@ -38,7 +49,7 @@ class _UnitCardState extends State<UnitCard> {
     }
   }
 
-  Future<void> _fetchChapters() async {
+  Future<void> _fetchChapters({bool expand = false}) async {
     setState(() {
       _isLoading = true;
     });
@@ -50,7 +61,13 @@ class _UnitCardState extends State<UnitCard> {
       final data = json.decode(response.body);
       setState(() {
         _chapters = data['data'];
-        _isExpanded = true;
+        if (widget.selectedLanguage == 'Nepali') {
+          _chapters = _chapters.map((chapter) {
+            chapter['title'] = chapter['nepaliTitle'];
+            return chapter;
+          }).toList();
+        }
+        _isExpanded = expand ? true : _isExpanded;
         _isLoading = false;
       });
     } else {
@@ -61,8 +78,25 @@ class _UnitCardState extends State<UnitCard> {
     }
   }
 
+  List<dynamic> filterChapters() {
+    if (widget.searchQuery.isEmpty) {
+      return _chapters;
+    } else {
+      return _chapters.where((chapter) {
+        return chapter['title']
+            .toLowerCase()
+            .contains(widget.searchQuery.toLowerCase());
+      }).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<dynamic> filteredChapters = filterChapters();
+    if (widget.searchQuery.isNotEmpty && filteredChapters.isEmpty) {
+      return SizedBox.shrink();
+    }
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
@@ -120,7 +154,7 @@ class _UnitCardState extends State<UnitCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
-                    children: _chapters.asMap().entries.map((entry) {
+                    children: filteredChapters.asMap().entries.map((entry) {
                       int index = entry.key;
                       dynamic chapter = entry.value;
                       return _buildChapterItem(index, chapter);
@@ -135,13 +169,10 @@ class _UnitCardState extends State<UnitCard> {
   }
 
   Widget _buildChapterItem(int index, dynamic chapter) {
+    String chapterTitle = '${widget.unit.unitNumber}.${index + 1} ${chapter['title']}';
     return ListTile(
-      title: Text(
-        '${widget.unit.unitNumber}.${index + 1} ${chapter['title']}',
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.white,
-        ),
+      title: RichText(
+        text: _highlightSearchQuery(chapterTitle),
       ),
       onTap: () {
         Navigator.push(
@@ -158,5 +189,58 @@ class _UnitCardState extends State<UnitCard> {
       },
       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
     );
+  }
+
+  TextSpan _highlightSearchQuery(String text) {
+    if (widget.searchQuery.isEmpty) {
+      return TextSpan(
+        text: text,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      );
+    } else {
+      List<TextSpan> spans = [];
+      int start = 0;
+      int index;
+
+      String lowerCaseText = text.toLowerCase();
+      String lowerCaseQuery = widget.searchQuery.toLowerCase();
+
+      while ((index = lowerCaseText.indexOf(lowerCaseQuery, start)) != -1) {
+        if (index > start) {
+          spans.add(TextSpan(
+            text: text.substring(start, index),
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ));
+        }
+
+        spans.add(TextSpan(
+          text: text.substring(index, index + lowerCaseQuery.length),
+          style: const TextStyle(
+            fontSize: 16,
+            backgroundColor: Colors.yellow,
+          ),
+        ));
+
+        start = index + lowerCaseQuery.length;
+      }
+
+      if (start < text.length) {
+        spans.add(TextSpan(
+          text: text.substring(start),
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+          ),
+        ));
+      }
+
+      return TextSpan(children: spans);
+    }
   }
 }

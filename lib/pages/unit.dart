@@ -28,7 +28,9 @@ class UnitPage extends StatefulWidget {
 class _UnitPageState extends State<UnitPage> {
   var subName;
   int _selectedIndex = 0;
-   late Future<List<Unittwo>> futureUnits;
+  late Future<List<Unittwo>> futureUnits;
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
   String selectedLanguage = 'English';
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -79,86 +81,127 @@ class _UnitPageState extends State<UnitPage> {
     }
   }
 
+  Future<List<Unittwo>> searchUnitsWithChapters() async {
+    final response = await http.get(Uri.parse(
+        'https://dlc-dev.deerwalk.edu.np/api/search-chapters?query=$searchQuery&subject_id=${widget.gradeSubjectId}'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      Map<int, List<dynamic>> unitChaptersMap = {};
+
+      for (var chapter in data['data']) {
+        var unitId = chapter['unit']['id'];
+        if (!unitChaptersMap.containsKey(unitId)) {
+          unitChaptersMap[unitId] = [];
+        }
+        unitChaptersMap[unitId]!.add(chapter);
+      }
+
+      final responseUnits = await fetchUnits(selectedLanguage);
+      return responseUnits.where((unit) => unitChaptersMap.containsKey(unit.id)).toList();
+    } else {
+      throw Exception('Failed to search chapters');
+    }
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TopNavBar(),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              const BackButton(
-                color: Colors.white,
-              ),
-              Text(
-                '$subName',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24,
-                    color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: const Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: null,
-                      decoration: InputDecoration(
-                        hintText: 'Search for the desired topic',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: null,
-                    ),
-                  ),
-                  Icon(Icons.search, color: Colors.black),
-                ],
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const BackButton(
+                  color: Colors.white,
+                ),
+                Text(
+                  '$subName',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Center(
-                child: FutureBuilder<List<Unittwo>>(
-                  future: futureUnits,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.hasData) {
-                      List<Unittwo> units = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: units.length,
-                        itemBuilder: (context, index) {
-                          return UnitCard(
-                            subjectName: subName,
-                            unit: units[index],
-                            unitId: units[index].id,
-                            selectedLanguage: selectedLanguage,
-                          );
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search for the desired topic',
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchQuery = value;
+                          });
                         },
-                      );
-                    } else {
-                      return const Center(child: Text('No data found'));
-                    }
-                  },
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.search, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          // Trigger search
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FutureBuilder<List<Unittwo>>(
+                future: searchQuery.isEmpty ? futureUnits : searchUnitsWithChapters(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    List<Unittwo> units = snapshot.data!;
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: units.length,
+                      itemBuilder: (context, index) {
+                        return UnitCard(
+                          subjectName: subName,
+                          unit: units[index],
+                          unitId: units[index].id,
+                          selectedLanguage: selectedLanguage,
+                          searchQuery: searchQuery,
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No data found'));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
