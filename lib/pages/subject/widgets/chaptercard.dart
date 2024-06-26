@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
-import '../../../models/unit.dart';
 
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
@@ -13,12 +12,12 @@ class UnitCard extends StatefulWidget {
   final String selectedLanguage;
 
   UnitCard({
-    Key? key,
+    super.key,
     required this.unit,
     required this.subjectName,
     required this.unitId,
     required this.selectedLanguage,
-  }) : super(key: key);
+  });
 
   @override
   State<UnitCard> createState() => _UnitCardState();

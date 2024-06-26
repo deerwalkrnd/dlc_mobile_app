@@ -15,7 +15,7 @@ class FinalPage extends StatefulWidget {
   final String title;
   final String url;
 
-  FinalPage({
+  const FinalPage({
     super.key,
     required this.unit,
     required this.title,

@@ -111,7 +111,7 @@ class _SubjectPageState extends State<SubjectPage> {
                       subjectId: subject.id,
                       mainId: widget.id,
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             );

@@ -16,10 +16,10 @@ class UnitPage extends StatefulWidget {
   final int gradeSubjectId;
 
   const UnitPage({
-    Key? key,
+    super.key,
     required this.subjectName,
     required this.gradeSubjectId,
-  }) : super(key: key);
+  });
 
   @override
   State<UnitPage> createState() => _UnitPageState();

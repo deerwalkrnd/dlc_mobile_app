@@ -16,7 +16,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => DropdownState()),
         ChangeNotifierProvider(create: (_) => LocaleNotifier()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: L10n.all,
-      home:  HomePage(),
+      home:  const HomePage(),
     );
   }
 }
