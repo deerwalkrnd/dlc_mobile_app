@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DropdownState extends ChangeNotifier {
-  String _value = 'Nepali';
+  String _value = 'English';
 
   String get value => _value;
 

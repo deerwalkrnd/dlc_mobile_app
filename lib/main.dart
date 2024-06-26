@@ -1,5 +1,6 @@
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/more.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: L10n.all,
-      home:  const HomePage(),
+      home:   const HomePage(),
     );
   }
 }

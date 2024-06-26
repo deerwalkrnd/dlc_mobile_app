@@ -9,6 +9,7 @@ import 'package:dlc/pages/more/terms_of_use_page.dart';
 import 'package:dlc/pages/more/widgets/morecard.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
@@ -40,11 +41,11 @@ class _MorePageState extends State<MorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TopNavBar(),
-      body: const Column(
+      body: Column(
         children: [
           Padding(padding: EdgeInsets.all(10)),
           Center(
-            child: Text('More', style: AppTextStyles.headline600),
+            child: Text(AppLocalizations.of(context)!.more, style: AppTextStyles.headline600),
           ),
           SizedBox(
             height: 5,
@@ -54,22 +55,22 @@ class _MorePageState extends State<MorePage> {
             children: [
               MoreCard(
                 imagePath: "assets/images/more/flipped.png",
-                title: "Flipped Class",
+                title:  AppLocalizations.of(context)!.flippedTitle,
                 navigateTo: FlippedClassPage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/instructor.png",
-                title: "Instructors",
+                title: AppLocalizations.of(context)!.instructors,
                 navigateTo: InstructorsPage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/press.png",
-                title: "Press Release",
+                title: AppLocalizations.of(context)!.pressTitle,
                 navigateTo: PressReleasePage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/terms.png",
-                title: "Terms of Use",
+                title: AppLocalizations.of(context)!.termsOfUseTitle,
                 navigateTo: TermsOfUsePage(),
               ),
             ],
