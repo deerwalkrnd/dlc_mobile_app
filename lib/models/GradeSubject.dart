@@ -1,8 +1,3 @@
-// ignore_for_file: unused_import
-
-import 'dart:convert';
-
-// Define the GradeSubject class
 class GradeSubject {
   final int id;
   final String subjectName;
@@ -23,13 +18,33 @@ class GradeSubject {
   }
 }
 
-// Define the Unit class
+class Chapter {
+  final int id;
+  String title;
+  final String titleNepali;
+
+  Chapter({
+    required this.id,
+    required this.title,
+    required this.titleNepali,
+  });
+
+  factory Chapter.fromJson(Map<String, dynamic> json) {
+    return Chapter(
+      id: json['id'],
+      title: json['title'],
+      titleNepali: json['title_nepali'] ?? '',
+    );
+  }
+}
+
 class Unittwo {
   final int id;
   final GradeSubject gradeSubject;
   String name;
   final String nepaliName;
   final int unitNumber;
+  List<Chapter> chapters;
 
   Unittwo({
     required this.id,
@@ -37,20 +52,24 @@ class Unittwo {
     required this.name,
     required this.nepaliName,
     required this.unitNumber,
+    required this.chapters,
   });
 
   factory Unittwo.fromJson(Map<String, dynamic> json) {
+    var chaptersList = json['chapters'] as List<dynamic>? ?? [];
+    List<Chapter> chapters = chaptersList.map((i) => Chapter.fromJson(i)).toList();
+
     return Unittwo(
       id: json['id'],
       gradeSubject: GradeSubject.fromJson(json['grade_subject']),
       name: json['name'],
       nepaliName: json['nepali_name'],
       unitNumber: json['unit_number'],
+      chapters: chapters,
     );
   }
 }
 
-// Define the ApiResponse class
 class ApiResponse {
   final List<Unittwo> data;
 

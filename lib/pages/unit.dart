@@ -2,14 +2,17 @@ import 'dart:convert';
 import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../models/GradeSubject.dart';
+import 'package:provider/provider.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
-import 'package:provider/provider.dart';
 import 'package:dlc/models/dropdown_state.dart';
+import 'package:dlc/models/GradeSubject.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../constants.dart/constants.dart';
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
@@ -32,6 +35,9 @@ class _UnitPageState extends State<UnitPage> {
   TextEditingController searchController = TextEditingController();
   String searchQuery = '';
   String selectedLanguage = 'English';
+  String? selectedVideoTitle;
+  String? selectedVideoUrl;
+  late YoutubePlayerController _youtubeController;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -45,6 +51,23 @@ class _UnitPageState extends State<UnitPage> {
     selectedLanguage = Provider.of<DropdownState>(context, listen: false).value;
     futureUnits = fetchUnits(selectedLanguage);
     subName = widget.subjectName;
+
+    Provider.of<DropdownState>(context, listen: false).addListener(_updateLanguage);
+
+    _youtubeController = YoutubePlayerController(
+      initialVideoId: '',
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
+  }
+
+  void _updateLanguage() {
+    setState(() {
+      selectedLanguage = Provider.of<DropdownState>(context, listen: false).value;
+      futureUnits = fetchUnits(selectedLanguage);
+    });
   }
 
   void _onItemTapped(int index) {
@@ -63,12 +86,16 @@ class _UnitPageState extends State<UnitPage> {
         'https://dlc-dev.deerwalk.edu.np/api/subjects/${widget.gradeSubjectId}/unit'));
 
     if (response.statusCode == 200) {
-      ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(response.body));
+      ApiResponse apiResponse = ApiResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+
       List<Unittwo> units = apiResponse.data;
 
       units = units.map((unit) {
         if (language == 'Nepali') {
           unit.name = unit.nepaliName;
+          for (var chapter in unit.chapters) {
+            chapter.title = chapter.titleNepali.isNotEmpty ? chapter.titleNepali : chapter.title;
+          }
         }
         return unit;
       }).toList();
@@ -87,10 +114,14 @@ class _UnitPageState extends State<UnitPage> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+
       Map<int, List<dynamic>> unitChaptersMap = {};
 
       for (var chapter in data['data']) {
         var unitId = chapter['unit']['id'];
+        print(unitId);
+        var urlsYt= chapter['url'];
+        print(urlsYt);
         if (!unitChaptersMap.containsKey(unitId)) {
           unitChaptersMap[unitId] = [];
         }
@@ -107,16 +138,28 @@ class _UnitPageState extends State<UnitPage> {
   @override
   void dispose() {
     searchController.dispose();
+    Provider.of<DropdownState>(context, listen: false).removeListener(_updateLanguage);
+    _youtubeController.dispose();
     super.dispose();
+  }
+
+  void _selectVideo(String title, String url) {
+    setState(() {
+      selectedVideoTitle = title;
+      selectedVideoUrl = url;
+      _youtubeController.load(YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=AEl09jmRTrk')!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: const TopNavBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             Row(
               children: [
                 const BackButton(
@@ -146,7 +189,7 @@ class _UnitPageState extends State<UnitPage> {
                     Expanded(
                       child: TextField(
                         controller: searchController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Search for the desired topic',
                           border: InputBorder.none,
                         ),
@@ -158,7 +201,7 @@ class _UnitPageState extends State<UnitPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.search, color: Colors.black),
+                      icon: const Icon(Icons.search, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           // Trigger search
@@ -169,6 +212,28 @@ class _UnitPageState extends State<UnitPage> {
                 ),
               ),
             ),
+            if (selectedVideoTitle != null && selectedVideoUrl != null)
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        selectedVideoTitle!,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.headline700,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: YoutubePlayer(
+                        controller: _youtubeController,
+                        showVideoProgressIndicator: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: FutureBuilder<List<Unittwo>>(
@@ -181,7 +246,7 @@ class _UnitPageState extends State<UnitPage> {
                   } else if (snapshot.hasData) {
                     List<Unittwo> units = snapshot.data!;
                     return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: units.length,
                       itemBuilder: (context, index) {
@@ -191,6 +256,7 @@ class _UnitPageState extends State<UnitPage> {
                           unitId: units[index].id,
                           selectedLanguage: selectedLanguage,
                           searchQuery: searchQuery,
+                          onVideoSelected: _selectVideo,
                         );
                       },
                     );

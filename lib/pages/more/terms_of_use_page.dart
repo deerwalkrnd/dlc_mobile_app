@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/components/bottomnav.dart';
@@ -77,32 +76,39 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.intellectualPropertyTitle,
+                            text: AppLocalizations.of(context)!
+                                .intellectualPropertyTitle,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.intellectualPropertyText,
+                            text: AppLocalizations.of(context)!
+                                .intellectualPropertyText,
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.accessContentTitle,
+                            text: AppLocalizations.of(context)!
+                                .accessContentTitle,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.accessContentText,
+                            text:
+                                AppLocalizations.of(context)!.accessContentText,
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.userContentTitle,
+                            text:
+                                AppLocalizations.of(context)!.userContentTitle,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
                             text: AppLocalizations.of(context)!.userContentText,
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.linksToOtherWebsitesTitle,
+                            text: AppLocalizations.of(context)!
+                                .linksToOtherWebsitesTitle,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: AppLocalizations.of(context)!.linksToOtherWebsitesText,
+                            text: AppLocalizations.of(context)!
+                                .linksToOtherWebsitesText,
                           ),
                           TextSpan(
                             text: AppLocalizations.of(context)!.changesTitle,
@@ -129,5 +135,3 @@ class _TermsOfUsePageState extends State<TermsOfUsePage> {
     );
   }
 }
-
-

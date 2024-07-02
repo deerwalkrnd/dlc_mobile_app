@@ -14,7 +14,7 @@ class InstructorCard extends StatelessWidget {
     required this.name,
     required this.messageUrl,
     required this.phoneUrl,
-    required this.linkedInUrl,
+    required this.linkedInUrl, required String nepaliName,
   });
 
   @override

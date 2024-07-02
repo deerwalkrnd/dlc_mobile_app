@@ -48,42 +48,42 @@ class _InstructorsPageState extends State<InstructorsPage> {
       body: _futureInstructors == null
           ? const Center(child: Text("Error loading instructors"))
           : FutureBuilder<List<Instructor>>(
-              future: _futureInstructors,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No instructors found.'));
-                } else {
-                  final instructors = snapshot.data!;
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const Center(
-                          child: Text(
-                            'Instructors',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: _buildRows(instructors),
-                          ),
-                        ),
-                      ],
+        future: _futureInstructors,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No instructors found.'));
+          } else {
+            final instructors = snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Center(
+                    child: Text(
+                      'Instructors',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        decoration: TextDecoration.none,
+                      ),
                     ),
-                  );
-                }
-              },
-            ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: _buildRows(instructors),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
@@ -94,7 +94,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
   List<Widget> _buildRows(List<Instructor> instructors) {
     return List.generate(
       (instructors.length / 2).ceil(),
-      (index) {
+          (index) {
         final start = index * 2;
         final end = (index * 2 + 2).clamp(0, instructors.length);
         return _buildRow(instructors.sublist(start, end));
@@ -106,14 +106,13 @@ class _InstructorsPageState extends State<InstructorsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
-        return Expanded(
-          // Wrap each InstructorCard with Expanded
+        return Expanded( // Wrap each InstructorCard with Expanded
           child: InstructorCard(
             imagePath: instructor.imageUrl,
             name: instructor.name,
             messageUrl: 'mailto:${instructor.email}',
-            phoneUrl: 'tel:${instructor.contact}',
-            linkedInUrl: 's',
+            phoneUrl: 'tel:${instructor.contact}', linkedInUrl: 's',
+            nepaliName: instructor.nepaliName
           ),
         );
       }).toList(),

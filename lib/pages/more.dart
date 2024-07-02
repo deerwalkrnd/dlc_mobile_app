@@ -43,11 +43,11 @@ class _MorePageState extends State<MorePage> {
       appBar: const TopNavBar(),
       body: Column(
         children: [
-          Padding(padding: EdgeInsets.all(10)),
+          const Padding(padding: EdgeInsets.all(10)),
           Center(
             child: Text(AppLocalizations.of(context)!.more, style: AppTextStyles.headline600),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Wrap(
@@ -56,22 +56,22 @@ class _MorePageState extends State<MorePage> {
               MoreCard(
                 imagePath: "assets/images/more/flipped.png",
                 title:  AppLocalizations.of(context)!.flippedTitle,
-                navigateTo: FlippedClassPage(),
+                navigateTo: const FlippedClassPage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/instructor.png",
                 title: AppLocalizations.of(context)!.instructors,
-                navigateTo: InstructorsPage(),
+                navigateTo: const InstructorsPage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/press.png",
                 title: AppLocalizations.of(context)!.pressTitle,
-                navigateTo: PressReleasePage(),
+                navigateTo: const PressReleasePage(),
               ),
               MoreCard(
                 imagePath: "assets/images/more/terms.png",
                 title: AppLocalizations.of(context)!.termsOfUseTitle,
-                navigateTo: TermsOfUsePage(),
+                navigateTo: const TermsOfUsePage(),
               ),
             ],
           ),

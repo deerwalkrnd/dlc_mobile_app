@@ -24,9 +24,9 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error fetching grades: $e');
-    }
-  }
 
+}
+}
   Future<List<Grade_Subject>> fetchGradeSubjects(int gradeId) async {
     try {
       final url = '$baseUrl/grades/$gradeId/subjects';

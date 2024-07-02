@@ -57,7 +57,7 @@ class _PressReleasePageState extends State<PressReleasePage> {
                       color: Colors.black.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(3)),
                   child:  Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Text(
                       AppLocalizations.of(context)!.pressRelease,
                       style: AppTextStyles.bodyText300,

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/main.dart';
 import 'package:dlc/models/dropdown_state.dart';

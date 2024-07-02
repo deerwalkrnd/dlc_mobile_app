@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../../yt.dart';
 import '../../../models/GradeSubject.dart';
-import '../../../models/unit.dart';
 
 class UnitCard extends StatefulWidget {
   final Unittwo unit;
@@ -12,15 +10,17 @@ class UnitCard extends StatefulWidget {
   final int unitId;
   final String searchQuery;
   final String selectedLanguage;
+  final void Function(String title, String url) onVideoSelected;
 
-  UnitCard({
-    Key? key,
+  const UnitCard({
+    super.key,
     required this.unit,
     required this.subjectName,
     required this.unitId,
     required this.searchQuery,
     required this.selectedLanguage,
-  }) : super(key: key);
+    required this.onVideoSelected,
+  });
 
   @override
   State<UnitCard> createState() => _UnitCardState();
@@ -57,16 +57,11 @@ class _UnitCardState extends State<UnitCard> {
     final response = await http.get(Uri.parse(
         'https://dlc-dev.deerwalk.edu.np/api/units/${widget.unitId}/chapter'));
 
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
         _chapters = data['data'];
-        if (widget.selectedLanguage == 'Nepali') {
-          _chapters = _chapters.map((chapter) {
-            chapter['title'] = chapter['nepaliTitle'];
-            return chapter;
-          }).toList();
-        }
         _isExpanded = expand ? true : _isExpanded;
         _isLoading = false;
       });
@@ -83,9 +78,10 @@ class _UnitCardState extends State<UnitCard> {
       return _chapters;
     } else {
       return _chapters.where((chapter) {
-        return chapter['title']
-            .toLowerCase()
-            .contains(widget.searchQuery.toLowerCase());
+        String title = widget.selectedLanguage == 'Nepali'
+            ? chapter['title_nepali']
+            : chapter['title'];
+        return title.toLowerCase().contains(widget.searchQuery.toLowerCase());
       }).toList();
     }
   }
@@ -94,7 +90,7 @@ class _UnitCardState extends State<UnitCard> {
   Widget build(BuildContext context) {
     List<dynamic> filteredChapters = filterChapters();
     if (widget.searchQuery.isNotEmpty && filteredChapters.isEmpty) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Padding(
@@ -137,7 +133,9 @@ class _UnitCardState extends State<UnitCard> {
                         ),
                       ),
                       Text(
-                        widget.unit.name,
+                        widget.selectedLanguage == 'Nepali'
+                            ? widget.unit.nepaliName
+                            : widget.unit.name,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
@@ -169,23 +167,17 @@ class _UnitCardState extends State<UnitCard> {
   }
 
   Widget _buildChapterItem(int index, dynamic chapter) {
-    String chapterTitle = '${widget.unit.unitNumber}.${index + 1} ${chapter['title']}';
+    String chapterTitle = '${widget.unit.unitNumber}.${index + 1} '
+        '${widget.selectedLanguage == 'Nepali' ? chapter['title_nepali'] : chapter['title']}';
+    String videoUrl = chapter['url'];
+    print(videoUrl);
+
     return ListTile(
       title: RichText(
         text: _highlightSearchQuery(chapterTitle),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FinalPage(
-              unit: widget.unit,
-              title: chapter['title'],
-              url: chapter['url'],
-              sub_name_final: widget.subjectName,
-            ),
-          ),
-        );
+        widget.onVideoSelected(chapterTitle, videoUrl);
       },
       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
     );

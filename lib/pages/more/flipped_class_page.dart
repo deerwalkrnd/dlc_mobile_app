@@ -63,7 +63,7 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
                     borderRadius: BorderRadius.circular(3),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Text(
                       AppLocalizations.of(context)!.flippedCLass,
                       style: AppTextStyles.bodyText300,
