@@ -37,7 +37,7 @@ class _UnitPageState extends State<UnitPage> {
   String selectedLanguage = 'English';
   String? selectedVideoTitle;
   String? selectedVideoUrl;
-  late YoutubePlayerController _youtubeController;
+  YoutubePlayerController? _youtubeController;
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -53,14 +53,6 @@ class _UnitPageState extends State<UnitPage> {
     subName = widget.subjectName;
 
     Provider.of<DropdownState>(context, listen: false).addListener(_updateLanguage);
-
-    _youtubeController = YoutubePlayerController(
-      initialVideoId: '',
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
   }
 
   void _updateLanguage() {
@@ -119,9 +111,6 @@ class _UnitPageState extends State<UnitPage> {
 
       for (var chapter in data['data']) {
         var unitId = chapter['unit']['id'];
-        print(unitId);
-        var urlsYt= chapter['url'];
-        print(urlsYt);
         if (!unitChaptersMap.containsKey(unitId)) {
           unitChaptersMap[unitId] = [];
         }
@@ -139,7 +128,7 @@ class _UnitPageState extends State<UnitPage> {
   void dispose() {
     searchController.dispose();
     Provider.of<DropdownState>(context, listen: false).removeListener(_updateLanguage);
-    _youtubeController.dispose();
+    _youtubeController?.dispose();
     super.dispose();
   }
 
@@ -147,7 +136,15 @@ class _UnitPageState extends State<UnitPage> {
     setState(() {
       selectedVideoTitle = title;
       selectedVideoUrl = url;
-      _youtubeController.load(YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=AEl09jmRTrk')!);
+
+      // _youtubeController?.dispose();
+      _youtubeController = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(selectedVideoUrl!)!,
+        flags: const YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,
+        ),
+      );
     });
   }
 
@@ -227,7 +224,7 @@ class _UnitPageState extends State<UnitPage> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: YoutubePlayer(
-                        controller: _youtubeController,
+                        controller: _youtubeController!,
                         showVideoProgressIndicator: true,
                       ),
                     ),

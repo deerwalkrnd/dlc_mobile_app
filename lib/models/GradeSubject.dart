@@ -22,11 +22,13 @@ class Chapter {
   final int id;
   String title;
   final String titleNepali;
+  final String url;
 
   Chapter({
     required this.id,
     required this.title,
     required this.titleNepali,
+    required this.url,
   });
 
   factory Chapter.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class Chapter {
       id: json['id'],
       title: json['title'],
       titleNepali: json['title_nepali'] ?? '',
+      url: json['url'],
     );
   }
 }

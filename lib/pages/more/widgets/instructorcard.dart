@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/more/widgets/iconrow.dart';
+import 'package:provider/provider.dart';
+
+import '../../../models/dropdown_state.dart';
 
 class InstructorCard extends StatelessWidget {
   final String imagePath;
@@ -8,17 +11,23 @@ class InstructorCard extends StatelessWidget {
   final String phoneUrl;
   final String linkedInUrl;
 
+  final String nepaliName;
+
+
   const InstructorCard({
     super.key,
     required this.imagePath,
     required this.name,
     required this.messageUrl,
     required this.phoneUrl,
-    required this.linkedInUrl, required String nepaliName,
+    required this.linkedInUrl, required  this.nepaliName,
   });
+
 
   @override
   Widget build(BuildContext context) {
+    final dropdownState = Provider.of<DropdownState>(context);
+    final bool isNepali = dropdownState.value == 'Nepali';
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -30,7 +39,7 @@ class InstructorCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            name,
+            isNepali ? nepaliName : name,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16,

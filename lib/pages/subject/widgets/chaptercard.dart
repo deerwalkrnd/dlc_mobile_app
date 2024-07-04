@@ -57,7 +57,6 @@ class _UnitCardState extends State<UnitCard> {
     final response = await http.get(Uri.parse(
         'https://dlc-dev.deerwalk.edu.np/api/units/${widget.unitId}/chapter'));
 
-
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
