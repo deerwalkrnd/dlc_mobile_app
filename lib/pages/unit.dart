@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dlc/components/youtube_player_container.dart';
 import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -29,7 +30,7 @@ class UnitPage extends StatefulWidget {
 }
 
 class _UnitPageState extends State<UnitPage> {
-  var subName;
+  dynamic subName;
   int _selectedIndex = 0;
   late Future<List<Unittwo>> futureUnits;
   TextEditingController searchController = TextEditingController();
@@ -132,20 +133,24 @@ class _UnitPageState extends State<UnitPage> {
     super.dispose();
   }
 
-  void _selectVideo(String title, String url) {
+   void _selectVideo(String title, String url) async {
+    _youtubeController?.load(YoutubePlayer.convertUrlToId(selectedVideoUrl!)!);
+
+    setState(() {
+      selectedVideoUrl = null;
+      selectedVideoTitle = null;
+    });
+
+
+    await Future.delayed(new Duration(seconds:1 ));
+
     setState(() {
       selectedVideoTitle = title;
       selectedVideoUrl = url;
 
-      // _youtubeController?.dispose();
-      _youtubeController = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(selectedVideoUrl!)!,
-        flags: const YoutubePlayerFlags(
-          autoPlay: true,
-          mute: false,
-        ),
-      );
+
     });
+
   }
 
   @override
@@ -210,27 +215,9 @@ class _UnitPageState extends State<UnitPage> {
               ),
             ),
             if (selectedVideoTitle != null && selectedVideoUrl != null)
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Center(
-                      child: Text(
-                        selectedVideoTitle!,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.headline700,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: YoutubePlayer(
-                        controller: _youtubeController!,
-                        showVideoProgressIndicator: true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              YoutubePlayerContainer(videoId: selectedVideoUrl!, selectedVideoTitle: selectedVideoTitle!),
+
+
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: FutureBuilder<List<Unittwo>>(
