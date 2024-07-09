@@ -25,7 +25,7 @@ class IconRow extends StatelessWidget {
   Future<void> _launchPhoneURL(String url) async {
     final Uri launchUri = Uri(
           scheme: 'tel',
-          path: url,
+          path: url.substring(3,url.length),
         );
         await launchUrl(launchUri);
   }
@@ -33,7 +33,7 @@ class IconRow extends StatelessWidget {
   Future<void> _launchMailURL(String url) async {
     final Uri launchUri = Uri(
           scheme: 'mailto',
-          path: url,
+          path: url.substring(8, url.length),
         );
         await launchUrl(launchUri);
   }
@@ -41,6 +41,8 @@ class IconRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () => _launchPhoneURL(phoneUrl), 

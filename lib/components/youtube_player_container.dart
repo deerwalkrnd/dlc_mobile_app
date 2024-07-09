@@ -3,22 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YoutubePlayerContainer extends StatelessWidget {
+  final Widget player;
+  final YoutubePlayerController controller;
   final String selectedVideoTitle;
 
   YoutubePlayerContainer(
-      {super.key, required String videoId, required this.selectedVideoTitle}) {
-
-    this._controller = new YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(videoId) ?? '',
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
-    this._controller.load(YoutubePlayer.convertUrlToId(videoId) ?? '');
-  }
-
-  late YoutubePlayerController _controller;
+      {super.key,
+      required this.player,
+      required this.controller,
+      required this.selectedVideoTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +21,12 @@ class YoutubePlayerContainer extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              selectedVideoTitle!,
+              selectedVideoTitle,
               textAlign: TextAlign.center,
               style: AppTextStyles.headline700,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: YoutubePlayer(
-              controller: _controller!,
-              showVideoProgressIndicator: true,
-            ),
-          ),
+          Padding(padding: const EdgeInsets.all(10), child: player),
         ],
       ),
     );

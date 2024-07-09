@@ -13,27 +13,29 @@ class InstructorCard extends StatelessWidget {
 
   final String nepaliName;
 
-
   const InstructorCard({
     super.key,
     required this.imagePath,
     required this.name,
     required this.messageUrl,
     required this.phoneUrl,
-    required this.linkedInUrl, required  this.nepaliName,
+    required this.linkedInUrl,
+    required this.nepaliName,
   });
-
 
   @override
   Widget build(BuildContext context) {
     final dropdownState = Provider.of<DropdownState>(context);
     final bool isNepali = dropdownState.value == 'Nepali';
+    print(imagePath);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          Image.asset(
-            imagePath,
+
+          Image.network(
+            'https://dlc-dev.deerwalk.edu.np/storage/images/instructors/$imagePath',
+
             width: 100,
             height: 100,
           ),
@@ -42,7 +44,7 @@ class InstructorCard extends StatelessWidget {
             isNepali ? nepaliName : name,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 18,
             ),
           ),
           const SizedBox(height: 10),

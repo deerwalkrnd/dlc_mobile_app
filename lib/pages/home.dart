@@ -18,21 +18,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List _widgetOptions = [
     HomeWidget(),
     UpdatesPage(),
     MorePage(),
   ];
 
   void _onItemTapped(int index) {
+
     setState(() {
+
       _selectedIndex = index;
     });
+    if (index == 0) {
+      (){};
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-    );
+    }else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => _widgetOptions[index]),
+      );
+    }
+
   }
 
   @override
@@ -117,7 +124,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _searchController,
+                      // controller: _searchController,
                       decoration: const InputDecoration(
                         hintText: 'Search for the desired class',
                         border: InputBorder.none,
@@ -151,12 +158,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                 return const Center(child: Text("No grades available"));
               } else {
                 final grades =
-                filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
+                    filteredGrades.isEmpty ? snapshot.data! : filteredGrades;
                 return Wrap(
                   spacing: 10.0,
                   runSpacing: 10.0,
                   children:
-                  grades.map((grade) => GradeCard(grade: grade)).toList(),
+                      grades.map((grade) => GradeCard(grade: grade)).toList(),
                 );
               }
             },
@@ -206,7 +213,8 @@ class GradeCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SubjectPage(id: grade.id, grade: displayGrade)),
+                    builder: (context) =>
+                        SubjectPage(id: grade.id, grade: displayGrade)),
               );
             },
             child: SizedBox(
@@ -256,4 +264,3 @@ class GradeCard extends StatelessWidget {
     }
   }
 }
-

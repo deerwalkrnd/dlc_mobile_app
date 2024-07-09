@@ -7,6 +7,8 @@ import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/more/widgets/instructorcard.dart';
 import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/instructors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class InstructorsPage extends StatefulWidget {
   const InstructorsPage({super.key});
@@ -61,9 +63,9 @@ class _InstructorsPageState extends State<InstructorsPage> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  const Center(
+                   Center(
                     child: Text(
-                      'Instructors',
+                      AppLocalizations.of(context)!.instructors,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,

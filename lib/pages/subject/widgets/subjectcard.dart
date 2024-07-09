@@ -33,13 +33,17 @@ class SubjectCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    imagePath,
+                  child: Image.network(
+                    'https://dlc-dev.deerwalk.edu.np/storage/images/subjects/$imagePath',
+                    // imagePath
+
+
                     width: 250,
                     height: 100,
                     fit: BoxFit.cover,
                   ),
                 ),
+
                 const SizedBox(height: 5),
                 Text(
                   subjectName,
