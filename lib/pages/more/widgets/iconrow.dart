@@ -33,7 +33,7 @@ class IconRow extends StatelessWidget {
   Future<void> _launchMailURL(String url) async {
     final Uri launchUri = Uri(
           scheme: 'mailto',
-          path: url.substring(8, url.length),
+          path: url.substring(7, url.length),
         );
         await launchUrl(launchUri);
   }

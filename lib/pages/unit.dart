@@ -13,6 +13,7 @@ import 'package:dlc/pages/more.dart';
 import 'package:dlc/models/dropdown_state.dart';
 import 'package:dlc/models/GradeSubject.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UnitPage extends StatefulWidget {
   final String subjectName;
@@ -41,6 +42,7 @@ class _UnitPageState extends State<UnitPage> {
   final YoutubePlayerController _youtubeController = YoutubePlayerController(
       initialVideoId: '', flags: const YoutubePlayerFlags(autoPlay: false));
   bool isNewSelected = true;
+  final ScrollController _scrollController = ScrollController();
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -143,6 +145,7 @@ class _UnitPageState extends State<UnitPage> {
     Provider.of<DropdownState>(context, listen: false)
         .removeListener(_updateLanguage);
     _youtubeController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -153,6 +156,12 @@ class _UnitPageState extends State<UnitPage> {
     });
 
     _youtubeController.load(YoutubePlayer.convertUrlToId(url ?? '')!);
+
+    _scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -170,6 +179,7 @@ class _UnitPageState extends State<UnitPage> {
           return Scaffold(
             appBar: const TopNavBar(),
             body: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   Row(
@@ -178,7 +188,7 @@ class _UnitPageState extends State<UnitPage> {
                         color: Colors.white,
                       ),
                       Text(
-                        '$subName',
+                        whichSubjectLocalize(subName),
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 24,
@@ -201,8 +211,8 @@ class _UnitPageState extends State<UnitPage> {
                           Expanded(
                             child: TextField(
                               controller: searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Search for the desired topic',
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context)!.hinttwo,
                                 border: InputBorder.none,
                               ),
                               onChanged: (value) {
@@ -238,7 +248,9 @@ class _UnitPageState extends State<UnitPage> {
                             height: 50,
                             width: 90,
                             decoration: BoxDecoration(
-                              color: isNewSelected ? Colors.white : const Color(0xFF0f5288),
+                              color: isNewSelected
+                                  ? Colors.white
+                                  : const Color(0xFF0f5288),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.white, width: 2),
                               boxShadow: const [
@@ -250,11 +262,13 @@ class _UnitPageState extends State<UnitPage> {
                             ),
                             child: Center(
                               child: Text(
-                                'New',
+                                AppLocalizations.of(context)!.naya,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 24,
-                                  color: isNewSelected ? Colors.blue : Colors.white,
+                                  color: isNewSelected
+                                      ? Colors.blue
+                                      : Colors.white,
                                 ),
                               ),
                             ),
@@ -275,7 +289,9 @@ class _UnitPageState extends State<UnitPage> {
                             height: 50,
                             width: 90,
                             decoration: BoxDecoration(
-                              color: isNewSelected ? const Color(0xFF0f5288) : Colors.white,
+                              color: isNewSelected
+                                  ? const Color(0xFF0f5288)
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.white, width: 2),
                               boxShadow: const [
@@ -287,11 +303,13 @@ class _UnitPageState extends State<UnitPage> {
                             ),
                             child: Center(
                               child: Text(
-                                'Old',
+                                AppLocalizations.of(context)!.old,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 24,
-                                  color: isNewSelected ? Colors.white : Colors.blue,
+                                  color: isNewSelected
+                                      ? Colors.white
+                                      : Colors.blue,
                                 ),
                               ),
                             ),
@@ -351,5 +369,29 @@ class _UnitPageState extends State<UnitPage> {
             ),
           );
         });
+  }
+
+  String whichSubjectLocalize(subName) {
+    switch (subName) {
+      case 'Science':
+        return AppLocalizations.of(context)!.subject_science;
+
+      case 'Mathematics':
+        return AppLocalizations.of(context)!.subject_mathematics;
+      case 'English':
+        return AppLocalizations.of(context)!.subject_english;
+      case 'Nepali':
+        return AppLocalizations.of(context)!.subject_nepali;
+      case 'Social Studies':
+        return AppLocalizations.of(context)!.subject_social_studies;
+      case 'Physics':
+        return AppLocalizations.of(context)!.subject_physics;
+      case 'Chemistry':
+        return AppLocalizations.of(context)!.subject_chemistry;
+      case 'Zoology':
+        return AppLocalizations.of(context)!.subject_zoology;
+      default:
+        return subName;
+    }
   }
 }

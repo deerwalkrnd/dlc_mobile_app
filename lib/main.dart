@@ -9,6 +9,8 @@ import 'package:dlc/models/dropdown_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'components/localeModifier.dart';
+import 'package:dlc/routers.dart';
+
 
 void main() {
   runApp(
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final localeNotifier = Provider.of<LocaleNotifier>(context);
 
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: oneBlue),
       locale: localeNotifier.locale,
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: L10n.all,
-      home:   const HomePage(),
+
     );
   }
 }

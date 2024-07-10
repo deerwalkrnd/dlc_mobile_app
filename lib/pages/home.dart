@@ -7,6 +7,7 @@ import 'package:dlc/services/api_service.dart';
 import 'package:dlc/models/grade.dart';
 import 'package:dlc/pages/subject/subject.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,9 @@ class _HomePageState extends State<HomePage> {
     UpdatesPage(),
     MorePage(),
   ];
+  static const List<String> routesPage= <String>[
+    "/","/updates","more"
+  ];
 
   void _onItemTapped(int index) {
 
@@ -34,10 +38,7 @@ class _HomePageState extends State<HomePage> {
       (){};
 
     }else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-      );
+      context.go(routesPage[index]);
     }
 
   }
@@ -125,8 +126,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                   Expanded(
                     child: TextField(
                       // controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search for the desired class',
+                      decoration:  InputDecoration(
+                        hintText: AppLocalizations.of(context)!.hint,
                         border: InputBorder.none,
                       ),
                       onChanged: _filterGrades,
@@ -216,6 +217,7 @@ class GradeCard extends StatelessWidget {
                     builder: (context) =>
                         SubjectPage(id: grade.id, grade: displayGrade)),
               );
+              // context.go( Uri(path:"/subjects/${grade.id}", queryParameters: {'displayGrade': displayGrade}).toString());
             },
             child: SizedBox(
               child: Center(
