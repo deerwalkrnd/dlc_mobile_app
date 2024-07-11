@@ -1,27 +1,21 @@
 // ignore_for_file: unused_field, unused_import
 
-import 'package:dlc/constants.dart/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
-import 'package:dlc/pages/updates.dart';
-import 'package:dlc/pages/more.dart';
-import 'package:dlc/services/api_service.dart';
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/models/grade.dart';
+import 'package:dlc/pages/more.dart';
 import 'package:dlc/pages/subject/subject.dart';
+import 'package:dlc/pages/updates.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Widget body;
 
-  DefaultLayout({required this.body});
-
-  // static const List _widgetOptions = [
-  //   HomeWidget(),
-  //   UpdatesPage(),
-  //   MorePage(),
-  // ];
+  const DefaultLayout({super.key, required this.body});
 
   static const List<String> allRoutes = ['/', '/updates', '/more'];
 
@@ -31,11 +25,14 @@ class DefaultLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(allRoutes
+        .indexOf(GoRouter.of(context).routeInformationProvider.value.uri.path));
     return Scaffold(
       appBar: const TopNavBar(),
       body: this.body,
       bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: allRoutes.indexOf(GoRouter.of(context).routeInformationProvider.value.uri.path),
+        selectedIndex: allRoutes.indexOf(
+            GoRouter.of(context).routeInformationProvider.value.uri.path),
         onItemTapped: (int index) => _onItemTapped(context, index),
       ),
     );

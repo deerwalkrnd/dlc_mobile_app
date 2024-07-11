@@ -8,7 +8,6 @@ import 'package:dlc/pages/updates.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
@@ -20,15 +19,13 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'updates',
           builder: (BuildContext context, GoRouterState state) {
-          return   UpdatesPage();
-
+            return UpdatesPage();
           },
         ),
         GoRoute(
           path: 'more',
           builder: (BuildContext context, GoRouterState state) {
             return MorePage();
-
           },
         ),
       ],
