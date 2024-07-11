@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
 import 'package:dlc/pages/updates.dart';
-import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/models/dropdown_state.dart';
 import 'package:dlc/models/GradeSubject.dart';
@@ -45,11 +45,6 @@ class _UnitPageState extends State<UnitPage> {
   bool isNewSelected = true;
   final ScrollController _scrollController = ScrollController();
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    UpdatesPage(),
-    MorePage(),
-  ];
 
   @override
   void initState() {
@@ -70,16 +65,8 @@ class _UnitPageState extends State<UnitPage> {
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-    );
-  }
+
 
   Future<List<Unittwo>> fetchUnits(String language) async {
     final apiUrl = newPage
@@ -167,216 +154,215 @@ class _UnitPageState extends State<UnitPage> {
 
   @override
   Widget build(BuildContext context) {
-    return YoutubePlayerBuilder(
-        player: YoutubePlayer(
-          controller: _youtubeController,
-          onReady: () {
-            _youtubeController
-                .load(YoutubePlayer.convertUrlToId(selectedVideoUrl ?? '')!);
-            _youtubeController.play();
-          },
-        ),
-        builder: (context, player) {
-          return Scaffold(
-            appBar: const TopNavBar(),
-            body: SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const BackButton(
-                        color: Colors.white,
-                      ),
-                      Text(
-                        whichSubjectLocalize(subName),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 24,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)!.hinttwo,
-                                border: InputBorder.none,
+    return DefaultLayout(
+      body: YoutubePlayerBuilder(
+          player: YoutubePlayer(
+            controller: _youtubeController,
+            onReady: () {
+              _youtubeController
+                  .load(YoutubePlayer.convertUrlToId(selectedVideoUrl ?? '')!);
+              _youtubeController.play();
+            },
+          ),
+          builder: (context, player) {
+            return Scaffold(
+
+              body: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const BackButton(
+                          color: Colors.white,
+                        ),
+                        Text(
+                          whichSubjectLocalize(subName),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: searchController,
+                                decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(context)!.hinttwo,
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    searchQuery = value;
+                                  });
+                                },
                               ),
-                              onChanged: (value) {
-                                setState(() {
-                                  searchQuery = value;
-                                });
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.search, color: Colors.black),
+                              onPressed: () {
+                                setState(() {});
                               },
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.search, color: Colors.black),
-                            onPressed: () {
-                              setState(() {});
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              newPage = true;
-                              futureUnits = fetchUnits(selectedLanguage);
-                              isNewSelected = true;
-                            });
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              color: isNewSelected
-                                  ? Colors.white
-                                  : const Color(0xFF0f5288),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 2),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xFFA5D6F2),
-                                  offset: Offset(4, 4),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.naya,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 24,
-                                  color: isNewSelected
-                                      ? Colors.blue
-                                      : Colors.white,
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                newPage = true;
+                                futureUnits = fetchUnits(selectedLanguage);
+                                isNewSelected = true;
+                              });
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                color: isNewSelected
+                                    ? Colors.white
+                                    : const Color(0xFF0f5288),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.white, width: 2),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0xFFA5D6F2),
+                                    offset: Offset(4, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!.naya,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 24,
+                                    color: isNewSelected
+                                        ? Colors.blue
+                                        : Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 8, 0, 8),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              newPage = false;
-                              futureUnits = fetchUnits(selectedLanguage);
-                              isNewSelected = false;
-                            });
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              color: isNewSelected
-                                  ? const Color(0xFF0f5288)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 2),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xFFA5D6F2),
-                                  offset: Offset(4, 4),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.old,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 24,
-                                  color: isNewSelected
-                                      ? Colors.white
-                                      : Colors.blue,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 0, 8),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                newPage = false;
+                                futureUnits = fetchUnits(selectedLanguage);
+                                isNewSelected = false;
+                              });
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 90,
+                              decoration: BoxDecoration(
+                                color: isNewSelected
+                                    ? const Color(0xFF0f5288)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.white, width: 2),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0xFFA5D6F2),
+                                    offset: Offset(4, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!.old,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 24,
+                                    color: isNewSelected
+                                        ? Colors.white
+                                        : Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  if (selectedVideoTitle != null && selectedVideoUrl != null)
-                    YoutubePlayerContainer(
-                        player: player,
-                        controller: _youtubeController,
-                        selectedVideoTitle: selectedVideoTitle ?? ''),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: FutureBuilder<List<Unittwo>>(
-                      future: searchQuery.isEmpty
-                          ? futureUnits
-                          : searchUnitsWithChapters(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.hasData) {
-                          List<Unittwo> units = snapshot.data!;
-
-                          if (units.isEmpty) {
+                        )
+                      ],
+                    ),
+                    if (selectedVideoTitle != null && selectedVideoUrl != null)
+                      YoutubePlayerContainer(
+                          player: player,
+                          controller: _youtubeController,
+                          selectedVideoTitle: selectedVideoTitle ?? ''),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: FutureBuilder<List<Unittwo>>(
+                        future: searchQuery.isEmpty
+                            ? futureUnits
+                            : searchUnitsWithChapters(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return const Center(
-                              child: Text('No units found', style:TextStyle(color: Colors.white)),
-                            );
-                          }
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (snapshot.hasData) {
+                            List<Unittwo> units = snapshot.data!;
 
-                          return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: units.length,
-                            itemBuilder: (context, index) {
-                              return UnitCard(
-                                subjectName: subName,
-                                unit: units[index],
-                                unitId: units[index].id,
-                                selectedLanguage: selectedLanguage,
-                                searchQuery: searchQuery,
-                                onVideoSelected: _selectVideo,
+                            if (units.isEmpty) {
+                              return const Center(
+                                child: Text('No units found', style:TextStyle(color: Colors.white)),
                               );
-                            },
-                          );
-                        } else {
-                          return const Center(child: Text('No data found'));
-                        }
-                      },
+                            }
+
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: units.length,
+                              itemBuilder: (context, index) {
+                                return UnitCard(
+                                  subjectName: subName,
+                                  unit: units[index],
+                                  unitId: units[index].id,
+                                  selectedLanguage: selectedLanguage,
+                                  searchQuery: searchQuery,
+                                  onVideoSelected: _selectVideo,
+                                );
+                              },
+                            );
+                          } else {
+                            return const Center(child: Text('No data found'));
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            bottomNavigationBar: MyBottomNavigationBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-          );
-        });
+
+            );
+          }),
+    );
   }
 
   String whichSubjectLocalize(subName) {

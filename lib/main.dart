@@ -2,7 +2,7 @@
 // ignore_for_file: unused_import
 
 import 'package:dlc/constants.dart/constants.dart';
-import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';

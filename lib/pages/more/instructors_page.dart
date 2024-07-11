@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/updates.dart';
-import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -20,14 +20,10 @@ class InstructorsPage extends StatefulWidget {
 }
 
 class _InstructorsPageState extends State<InstructorsPage> {
-  int _selectedIndex = 0;
+
   Future<List<Instructor>>? _futureInstructors;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    UpdatesPage(),
-    MorePage(),
-  ];
+
 
   @override
   void initState() {
@@ -35,62 +31,53 @@ class _InstructorsPageState extends State<InstructorsPage> {
     _futureInstructors = ApiService().fetchInstructors();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const TopNavBar(),
-      body: _futureInstructors == null
-          ? const Center(child: Text("Error loading instructors"))
-          : FutureBuilder<List<Instructor>>(
-        future: _futureInstructors,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No instructors found.'));
-          } else {
-            final instructors = snapshot.data!;
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                   Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.instructors,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        decoration: TextDecoration.none,
+    return DefaultLayout(
+      body: Scaffold(
+
+        body: _futureInstructors == null
+            ? const Center(child: Text("Error loading instructors"))
+            : FutureBuilder<List<Instructor>>(
+          future: _futureInstructors,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No instructors found.'));
+            } else {
+              final instructors = snapshot.data!;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                     Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.instructors,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: _buildRows(instructors),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: _buildRows(instructors),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
-      ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+                  ],
+                ),
+              );
+            }
+          },
+        ),
+
       ),
     );
   }

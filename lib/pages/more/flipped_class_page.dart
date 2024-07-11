@@ -4,7 +4,7 @@ import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
-import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/more.dart';
 
@@ -22,21 +22,7 @@ class FlippedClassPage extends StatefulWidget {
 class _FlippedClassPageState extends State<FlippedClassPage> {
   int _selectedIndex = 2;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    UpdatesPage(),
-    MorePage(),
-  ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-    );
-  }
 
   final YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'egMWlD3fLJ8',
@@ -48,61 +34,60 @@ class _FlippedClassPageState extends State<FlippedClassPage> {
 
   @override
   Widget build(BuildContext context) {
-    return YoutubePlayerBuilder(
-        player: YoutubePlayer(controller: _controller),
-        builder: (context, player) {
-          return Scaffold(
-            appBar: const TopNavBar(),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(AppLocalizations.of(context)!.flippedTitle,
-                          style: AppTextStyles.headline700),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            AppLocalizations.of(context)!.flippedCLass,
-                            style: AppTextStyles.bodyText300,
-                            textAlign: TextAlign.justify,
+    return DefaultLayout(
+      body: YoutubePlayerBuilder(
+          player: YoutubePlayer(controller: _controller),
+          builder: (context, player) {
+            return Scaffold(
+
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(AppLocalizations.of(context)!.flippedTitle,
+                            style: AppTextStyles.headline700),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              AppLocalizations.of(context)!.flippedCLass,
+                              style: AppTextStyles.bodyText300,
+                              textAlign: TextAlign.justify,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: getScreenHeight(context)*0.07,
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: getScreenHeight(context) * 0.25,
-                          width: getScreenWidth(context) * 0.9,
-                          child: player,
+                      SizedBox(
+                        height: getScreenHeight(context)*0.07,
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: getScreenHeight(context) * 0.25,
+                            width: getScreenWidth(context) * 0.9,
+                            child: player,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            bottomNavigationBar: MyBottomNavigationBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-          );
-        });
+
+            );
+          }),
+    );
   }
 }
