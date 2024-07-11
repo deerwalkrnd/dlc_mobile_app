@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dlc/components/youtube_player_container.dart';
+// ignore: unused_import
 import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/pages/subject/widgets/chaptercard.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,7 @@ class _UnitPageState extends State<UnitPage> {
       selectedVideoUrl = url;
     });
 
-    _youtubeController.load(YoutubePlayer.convertUrlToId(url ?? '')!);
+    _youtubeController.load(YoutubePlayer.convertUrlToId(url)!);
 
     _scrollController.animateTo(
       0.0,
@@ -339,6 +340,13 @@ class _UnitPageState extends State<UnitPage> {
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
                           List<Unittwo> units = snapshot.data!;
+
+                          if (units.isEmpty) {
+                            return const Center(
+                              child: Text('No units found', style:TextStyle(color: Colors.white)),
+                            );
+                          }
+
                           return ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,

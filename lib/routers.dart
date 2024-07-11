@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:dlc/pages/home.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/pages/subject/subject.dart';

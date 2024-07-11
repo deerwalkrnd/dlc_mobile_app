@@ -1,3 +1,6 @@
+// ignore_for_file: unused_field, unused_import
+
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
@@ -24,9 +27,7 @@ class _HomePageState extends State<HomePage> {
     UpdatesPage(),
     MorePage(),
   ];
-  static const List<String> routesPage= <String>[
-    "/","/updates","more"
-  ];
+
 
   void _onItemTapped(int index) {
 
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
       (){};
 
     }else {
-      context.go(routesPage[index]);
+      navigateTo(context, _widgetOptions[index]);
     }
 
   }

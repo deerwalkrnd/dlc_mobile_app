@@ -150,7 +150,14 @@ class _UnitCardState extends State<UnitCard> {
               if (_isExpanded && !_isLoading)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Column(
+                  child: filteredChapters.isEmpty
+                      ? const Center(
+                    child: Text(
+                      'No chapters found',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                      : Column(
                     children: filteredChapters.asMap().entries.map((entry) {
                       int index = entry.key;
                       dynamic chapter = entry.value;

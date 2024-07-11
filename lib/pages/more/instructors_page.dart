@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
@@ -66,7 +68,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
                    Center(
                     child: Text(
                       AppLocalizations.of(context)!.instructors,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,

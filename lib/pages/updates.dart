@@ -35,7 +35,7 @@ class _UpdatesPageState extends State<UpdatesPage> {
     return Scaffold(
       appBar: const TopNavBar(),
       body: const Center(
-        child: Text('Updates Page Content'),
+        child: Text('Updates Page Content', style: TextStyle(color: Colors.white),),
       ),
       bottomNavigationBar: MyBottomNavigationBar(
         selectedIndex: _selectedIndex,

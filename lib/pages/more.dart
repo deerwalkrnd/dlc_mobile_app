@@ -10,6 +10,7 @@ import 'package:dlc/pages/more/widgets/morecard.dart';
 import 'package:dlc/pages/updates.dart';
 import 'package:dlc/pages/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: unused_import
 import 'package:dlc/routers.dart';
 
 class MorePage extends StatefulWidget {
