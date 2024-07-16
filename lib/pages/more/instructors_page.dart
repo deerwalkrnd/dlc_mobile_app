@@ -97,7 +97,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
-        return Expanded( // Wrap each InstructorCard with Expanded
+        return Expanded( 
           child: InstructorCard(
             imagePath: instructor.imageUrl,
             name: instructor.name,

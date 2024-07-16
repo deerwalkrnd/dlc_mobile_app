@@ -1,5 +1,8 @@
 import 'package:dlc/constants.dart/constants.dart';
+import 'package:dlc/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:dlc/pages/more.dart';
+import 'package:dlc/pages/updates.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
@@ -42,7 +45,21 @@ class MyBottomNavigationBar extends StatelessWidget {
         currentIndex: selectedIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
-        onTap: onItemTapped,
+        onTap: (index) {
+          if (index == 2) {
+             Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MorePage()),
+            );
+          } else if(index == 0) {
+            Navigator.push(
+              context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          } else{
+            onItemTapped(index);
+          }
+        },
       ),
     );
   }

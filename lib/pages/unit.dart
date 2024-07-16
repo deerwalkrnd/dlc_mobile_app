@@ -213,9 +213,11 @@ class _UnitPageState extends State<UnitPage> {
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(25, 8, 0, 8),
+                      padding: const EdgeInsets.fromLTRB(24, 8, 0, 8),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -225,27 +227,22 @@ class _UnitPageState extends State<UnitPage> {
                           });
                         },
                         child: Container(
-                          height: 50,
-                          width: 90,
+                          height: 40,
+                          width: 80,
                           decoration: BoxDecoration(
                             color: isNewSelected
                                 ? Colors.white
-                                : const Color(0xFF0f5288),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.white, width: 2),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFFA5D6F2),
-                                offset: Offset(4, 4),
-                              ),
-                            ],
+                                : Color(0x000f5288),
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(color: Colors.white, width: 1),
+                           
                           ),
                           child: Center(
                             child: Text(
                               AppLocalizations.of(context)!.naya,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 24,
+                                fontSize: 20,
                                 color:
                                     isNewSelected ? Colors.blue : Colors.white,
                               ),
@@ -265,27 +262,22 @@ class _UnitPageState extends State<UnitPage> {
                           });
                         },
                         child: Container(
-                          height: 50,
-                          width: 90,
+                          height: 40,
+                          width: 80,
                           decoration: BoxDecoration(
                             color: isNewSelected
                                 ? const Color(0xFF0f5288)
                                 : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.white, width: 2),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFFA5D6F2),
-                                offset: Offset(4, 4),
-                              ),
-                            ],
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(color: Colors.white, width: 1),
+                            
                           ),
                           child: Center(
                             child: Text(
                               AppLocalizations.of(context)!.old,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 24,
+                                fontSize: 20,
                                 color:
                                     isNewSelected ? Colors.white : Colors.blue,
                               ),

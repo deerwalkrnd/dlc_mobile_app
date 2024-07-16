@@ -32,12 +32,20 @@ class InstructorCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-
-          Image.network(
-            'https://dlc-dev.deerwalk.edu.np/storage/images/instructors/$imagePath',
-
+          Container(
             width: 100,
             height: 100,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: ClipOval(
+              child: Image.network(
+                'https://dlc-dev.deerwalk.edu.np/storage/images/instructors/$imagePath',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           const SizedBox(height: 10),
           Text(
