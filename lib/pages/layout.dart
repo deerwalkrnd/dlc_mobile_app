@@ -23,16 +23,24 @@ class DefaultLayout extends StatelessWidget {
     context.go(allRoutes[index]);
   }
 
+  int getSelectedIndex(BuildContext context) {
+    String path = GoRouter.of(context).routeInformationProvider.value.uri.path;
+
+            if (path.startsWith("/updates")) {
+              return 1;
+            } else if (path.startsWith("/more")) {
+              return 2;
+            }
+            return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(allRoutes
-        .indexOf(GoRouter.of(context).routeInformationProvider.value.uri.path));
     return Scaffold(
       appBar: const TopNavBar(),
       body: this.body,
       bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: allRoutes.indexOf(
-            GoRouter.of(context).routeInformationProvider.value.uri.path),
+        selectedIndex: getSelectedIndex(context),
         onItemTapped: (int index) => _onItemTapped(context, index),
       ),
     );
@@ -75,14 +83,11 @@ class GradeCard extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        SubjectPage(id: grade.id, grade: displayGrade)),
-              );
-              // context.go( Uri(path:"/subjects/${grade.id}", queryParameters: {'displayGrade': displayGrade}).toString());
+              context.go(Uri(
+                  path: "/subjects/${grade.id}",
+                  queryParameters: {'grade': displayGrade}).toString());
             },
+            
             child: SizedBox(
               child: Center(
                 child: Text(

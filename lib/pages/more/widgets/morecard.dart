@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MoreCard extends StatelessWidget {
   final String imagePath;
   final String title;
-  final Widget navigateTo;
+  final String navigateTo;
 
   const MoreCard({
     super.key,
@@ -46,11 +47,9 @@ class MoreCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => navigateTo),
-          );
+          context.go('/$navigateTo');
         },
+          
       ),
     );
   }

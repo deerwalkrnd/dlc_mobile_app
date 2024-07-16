@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/unit.dart';
+import 'package:go_router/go_router.dart';
 
 class SubjectCard extends StatelessWidget {
   final String imagePath;
@@ -18,51 +19,54 @@ class SubjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.black.withOpacity(0.35),
-              border: Border.all(color: Colors.white, width: 0.25),
-            ),
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    'https://dlc-dev.deerwalk.edu.np/storage/images/subjects/$imagePath',
-                    // imagePath
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.black.withOpacity(0.35),
+                border: Border.all(color: Colors.white, width: 0.25),
+              ),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      'https://dlc-dev.deerwalk.edu.np/storage/images/subjects/$imagePath',
+                      // imagePath
 
-
-                    width: 250,
-                    height: 100,
-                    fit: BoxFit.cover,
+                      width: 250,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 5),
-                Text(
-                  subjectName,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  const SizedBox(height: 5),
+                  Text(
+                    subjectName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                const Padding(padding: EdgeInsets.only(bottom: 5))
-              ],
+                  const Padding(padding: EdgeInsets.only(bottom: 5))
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UnitPage(subjectName: subjectName, gradeSubjectId: subjectId)),
-        );
-      },
-    );
+        onTap: () { 
+          // context.go(Uri(
+          //           path: "units/${subjectId}",
+          //           queryParameters: {'subjectName': subjectName}).toString());
+                    
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UnitPage(
+                    subjectName: subjectName, gradeSubjectId: subjectId)),
+          );
+        });
   }
 }

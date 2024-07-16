@@ -13,54 +13,52 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: unused_import
 import 'package:dlc/routers.dart';
 
-
-
 class MorePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       body:
        Scaffold(
 
-        body: Column(
+        body:Column(
+      children: [
+        const Padding(padding: EdgeInsets.all(10)),
+        Center(
+          child: Text(AppLocalizations.of(context)!.more,
+              style: AppTextStyles.headline600),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Wrap(
+          runSpacing: 4,
           children: [
-            const Padding(padding: EdgeInsets.all(10)),
-            Center(
-              child: Text(AppLocalizations.of(context)!.more, style: AppTextStyles.headline600),
+            MoreCard(
+              imagePath: "assets/images/more/flipped.png",
+              title: AppLocalizations.of(context)!.flippedTitle,
+              navigateTo: "flipped",
             ),
-            const SizedBox(
-              height: 5,
+            MoreCard(
+              imagePath: "assets/images/more/instructor.png",
+              title: AppLocalizations.of(context)!.instructors,
+              navigateTo: "instructor",
             ),
-            Wrap(
-              runSpacing: 4, //4 multiple better
-              children: [
-                MoreCard(
-                  imagePath: "assets/images/more/flipped.png",
-                  title:  AppLocalizations.of(context)!.flippedTitle,
-                  navigateTo: const FlippedClassPage(),
-                ),
-                MoreCard(
-                  imagePath: "assets/images/more/instructor.png",
-                  title: AppLocalizations.of(context)!.instructors,
-                  navigateTo: const InstructorsPage(),
-                ),
-                MoreCard(
-                  imagePath: "assets/images/more/press.png",
-                  title: AppLocalizations.of(context)!.pressTitle,
-                  navigateTo: const PressReleasePage(),
-                ),
-                MoreCard(
-                  imagePath: "assets/images/more/terms.png",
-                  title: AppLocalizations.of(context)!.termsOfUseTitle,
-                  navigateTo: const TermsOfUsePage(),
-                ),
-              ],
+            MoreCard(
+              imagePath: "assets/images/more/press.png",
+              title: AppLocalizations.of(context)!.pressTitle,
+              navigateTo: "press",
+            ),
+            MoreCard(
+              imagePath: "assets/images/more/terms.png",
+              title: AppLocalizations.of(context)!.termsOfUseTitle,
+              navigateTo: "terms",
             ),
           ],
+        )
+      ],
         ),
-
-      ),
+       ),
+  
     );
   }
 }

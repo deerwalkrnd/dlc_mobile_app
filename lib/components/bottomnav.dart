@@ -46,19 +46,7 @@ class MyBottomNavigationBar extends StatelessWidget {
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
         onTap: (index) {
-          if (index == 2) {
-             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MorePage()),
-            );
-          } else if(index == 0) {
-            Navigator.push(
-              context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          } else{
             onItemTapped(index);
-          }
         },
       ),
     );
