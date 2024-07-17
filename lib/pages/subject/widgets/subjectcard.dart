@@ -56,17 +56,17 @@ class SubjectCard extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () { 
-          // context.go(Uri(
-          //           path: "units/${subjectId}",
-          //           queryParameters: {'subjectName': subjectName}).toString());
-                    
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UnitPage(
-                    subjectName: subjectName, gradeSubjectId: subjectId)),
-          );
+        onTap: () {
+          context.go(Uri(
+              path: "/units/$subjectId",
+              queryParameters: {'subjectName': subjectName}).toString());
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => UnitPage(
+          //           subjectName: subjectName, gradeSubjectId: subjectId)),
+          // );
         });
   }
 }

@@ -1,8 +1,5 @@
 import 'package:dlc/constants.dart/constants.dart';
-import 'package:dlc/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:dlc/pages/more.dart';
-import 'package:dlc/pages/updates.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;

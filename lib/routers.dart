@@ -19,13 +19,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return HomePage();
+        return const HomePage();
       },
       routes: <RouteBase>[
         GoRoute(
           path: 'updates',
           builder: (BuildContext context, GoRouterState state) {
-            return UpdatesPage();
+            return const UpdatesPage();
           },
         ),
         GoRoute(
@@ -60,25 +60,25 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'flipped',
           builder: (BuildContext context, GoRouterState state){
-            return FlippedClassPage();
+            return const FlippedClassPage();
           }
         ),
         GoRoute(
           path: 'terms',
           builder: (BuildContext context, GoRouterState state){
-            return TermsOfUsePage();
+            return const TermsOfUsePage();
           }
         ),
         GoRoute(
           path: 'instructor',
           builder: (BuildContext context, GoRouterState state){
-            return InstructorsPage();
+            return const InstructorsPage();
           }
         ),
          GoRoute(
           path: 'press',
           builder: (BuildContext context, GoRouterState state){
-            return PressReleasePage();
+            return const PressReleasePage();
           }
         ),
       ],
