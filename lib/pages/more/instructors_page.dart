@@ -54,7 +54,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                     Center(
+                    Center(
                       child: Text(
                         AppLocalizations.of(context)!.instructors,
                         style: const TextStyle(
@@ -97,13 +97,13 @@ class _InstructorsPageState extends State<InstructorsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
-        return Expanded( 
+        return Expanded(
           child: InstructorCard(
-            imagePath: instructor.imageUrl,
-            name: instructor.name,
-            messageUrl: 'mailto:${instructor.email}',
-            phoneUrl: 'tel:${instructor.contact}', linkedInUrl: 's',
-            nepaliName: instructor.nepaliName
+              imagePath: instructor.imageUrl,
+              name: instructor.name,
+              messageUrl: 'mailto:${instructor.email}',
+              phoneUrl: 'tel:${instructor.contact}', linkedInUrl: 's',
+              nepaliName: instructor.nepaliName
           ),
         );
       }).toList(),
