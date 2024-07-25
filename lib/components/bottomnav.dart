@@ -1,4 +1,4 @@
-import 'package:dlc/main.dart';
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:flutter/material.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
@@ -8,19 +8,19 @@ class MyBottomNavigationBar extends StatelessWidget {
   const MyBottomNavigationBar({
     required this.selectedIndex,
     required this.onItemTapped,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           top: BorderSide(width: 0.25, color: Colors.white),
         ),
       ),
       child: BottomNavigationBar(
-        backgroundColor: MyApp.customColor,
+        backgroundColor: oneBlue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

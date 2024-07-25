@@ -1,84 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:dlc/components/bottomnav.dart';
+import 'package:dlc/components/topnavbar.dart';
+import 'package:dlc/pages/layout.dart';
+import 'package:dlc/pages/updates.dart';
+import 'package:dlc/pages/more.dart';
+import 'package:dlc/pages/subject/widgets/subjectcard.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:dlc/models/grade_subject.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+class SubjectPage extends StatefulWidget {
+  final String grade;
+  final int id;
 
-class Subject extends StatefulWidget {
-  const Subject({super.key});
+  const SubjectPage({super.key, required this.grade, required this.id});
 
   @override
-  State<Subject> createState() => _SubjectState();
+  State<SubjectPage> createState() => _SubjectPageState();
 }
 
-class _SubjectState extends State<Subject> {
+class _SubjectPageState extends State<SubjectPage> {
+  int _selectedIndex = 0;
+  late Future<List<Grade_Subject>> futureSubjects;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child:Column(
-        children: [
-          Padding(padding: EdgeInsets.all(12)),
-          Center(
-            child: Text(
-              'Choose Your Subject',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                decoration: TextDecoration.none,
-              ),
-            ),
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/maths.jpg",
-            subjectName: 'Mathematics',
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/phy.jpg",
-            subjectName: 'Science',
-          ),
-          subjectContainer(
-            imagePath: "assets/images/subjects/eng.jpg",
-            subjectName: 'English',
-          ),
-        ],
-      ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    futureSubjects = ApiService().fetchGradeSubjects(widget.id);
   }
 
-Widget subjectContainer({required String imagePath, required String subjectName}) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.black.withOpacity(0.35),
-            border: Border.all(color: Colors.white, width: 0.25),
-          ),
-          padding: EdgeInsets.fromLTRB(10,10,10,5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  imagePath,
-                  width: 250,
-                  height: 100,
-                  fit: BoxFit.cover,
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultLayout(
+      body: Scaffold(
+
+        body: FutureBuilder<List<Grade_Subject>>(
+          future: futureSubjects,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No subjects found.'));
+            } else {
+              final subjects = snapshot.data!;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Padding(padding: EdgeInsets.all(12)),
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.choose_your_subject,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    ...subjects.map((subject) {
+                      String subjectName;
+                      switch (subject.subjectName) {
+                        case 'Science':
+                          subjectName = AppLocalizations.of(context)!.subject_science;
+                          break;
+                        case 'Mathematics':
+                          subjectName = AppLocalizations.of(context)!.subject_mathematics;
+                          break;
+                        case 'English':
+                          subjectName = AppLocalizations.of(context)!.subject_english;
+                          break;
+                        case 'Nepali':
+                          subjectName = AppLocalizations.of(context)!.subject_nepali;
+                          break;
+                        case 'Social Studies':
+                          subjectName = AppLocalizations.of(context)!.subject_social_studies;
+                          break;
+                        case 'Physics':
+                          subjectName = AppLocalizations.of(context)!.subject_physics;
+                          break;
+                        case 'Chemistry':
+                          subjectName = AppLocalizations.of(context)!.subject_chemistry;
+                          break;
+                        case 'Zoology':
+                          subjectName = AppLocalizations.of(context)!.subject_zoology;
+                          break;
+                        default:
+                          subjectName = subject.subjectName;
+                      }
+                      return SubjectCard(
+                        imagePath: subject.subjectImageUrl,
+                        subjectName: subjectName,
+                        subjectId: subject.id,
+                        mainId: widget.id,
+                      );
+                    }),
+                  ],
                 ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                subjectName,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 5))
-            ],
-          ),
+              );
+            }
+          },
         ),
+        
       ),
     );
   }

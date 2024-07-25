@@ -1,38 +1,24 @@
+// ignore_for_file: unused_import
+
+import 'package:dlc/constants.dart/constants.dart';
 import 'package:dlc/main.dart';
-import 'package:dlc/pages/home.dart';
-import 'package:dlc/pages/layout.dart';
+import 'package:dlc/models/dropdown_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class TopNavBar extends StatefulWidget implements PreferredSizeWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onItemTapped;
+import 'localeModifier.dart';
 
-  TopNavBar({
-    required this.selectedIndex,
-    required this.onItemTapped,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _TopNavBarState createState() => _TopNavBarState();
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-}
-
-class _TopNavBarState extends State<TopNavBar> {
-  String dropdownValue = 'Nepali';
-
-  var items = [
-    'Nepali',
-    'English',
-  ];
+class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
+  const TopNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final dropdownState = Provider.of<DropdownState>(context);
+    final List<String> items = ['Nepali', 'English'];
+
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             color: Colors.white,
@@ -43,29 +29,37 @@ class _TopNavBarState extends State<TopNavBar> {
       ),
       child: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: MyApp.customColor,
+        backgroundColor: oneBlue,
         elevation: 0,
         title: Row(
           children: [
             GestureDetector(
-              child: Image.asset(
-                'assets/images/deerwalklearning.png',
-                width: 150,
-                fit: BoxFit.cover,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 150, maxWidth: 160),
+                  child: Image.asset(
+                    'assets/images/deerwalklearning.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyApp()),
-                    );
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
               },
             ),
-            SizedBox(width: 8),
-            Spacer(),
-            SizedBox(
-              height: 30, 
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 30,
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: 0),
+                margin: const EdgeInsets.symmetric(vertical: 0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.white,
@@ -75,31 +69,39 @@ class _TopNavBarState extends State<TopNavBar> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    padding: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
-                    value: dropdownValue,
-                    icon: null,
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    value: dropdownState.value, // Use dropdownState.value
                     iconSize: 0,
-                    dropdownColor: MyApp.customColor,
-                     // Background color of the dropdown
-                    style: TextStyle(color: Colors.white), // Text color of dropdown items
+                    dropdownColor: oneBlue,
+                    style: const TextStyle(color: Colors.white),
                     items: items.map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
                         child: Text(item),
                       );
                     }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        dropdownState.value = newValue;
+                        if (newValue == 'Nepali') {
+                          Provider.of<LocaleNotifier>(context, listen: false)
+                              .setLocale(const Locale('ne'));
+                        } else {
+                          Provider.of<LocaleNotifier>(context, listen: false)
+                              .setLocale(const Locale('en'));
+                        }
+                      }
                     },
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

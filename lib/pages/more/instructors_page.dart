@@ -1,9 +1,16 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:dlc/pages/updates.dart';
-import 'package:dlc/pages/home.dart';
+import 'package:dlc/pages/layout.dart';
 import 'package:dlc/pages/more.dart';
 import 'package:dlc/components/bottomnav.dart';
 import 'package:dlc/components/topnavbar.dart';
+import 'package:dlc/pages/more/widgets/instructorcard.dart';
+import 'package:dlc/services/api_service.dart';
+import 'package:dlc/models/instructors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class InstructorsPage extends StatefulWidget {
   const InstructorsPage({super.key});
@@ -13,71 +20,64 @@ class InstructorsPage extends StatefulWidget {
 }
 
 class _InstructorsPageState extends State<InstructorsPage> {
-  int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    UpdatesPage(),
-    MorePage(),
-  ];
+  Future<List<Instructor>>? _futureInstructors;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => _widgetOptions[index]),
-    );
+
+
+  @override
+  void initState() {
+    super.initState();
+    _futureInstructors = ApiService().fetchInstructors();
   }
 
-  final List<Instructor> instructors = [
-    Instructor(imagePath: "assets/images/instructors/1.png", name: 'Aakash Chandra Giri'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-    Instructor(imagePath: "assets/images/instructors/2.png", name: 'Aakancha Thapa'),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TopNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Text(
-                'Instructors',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  decoration: TextDecoration.none,
+    return DefaultLayout(
+      body: Scaffold(
+
+        body: _futureInstructors == null
+            ? const Center(child: Text("Error loading instructors"))
+            : FutureBuilder<List<Instructor>>(
+          future: _futureInstructors,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No instructors found.'));
+            } else {
+              final instructors = snapshot.data!;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                     Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.instructors,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: _buildRows(instructors),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: _buildRows(instructors),
-              ),
-            ),
-          ],
+              );
+            }
+          },
         ),
-      ),
-      bottomNavigationBar: MyBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+
       ),
     );
   }
@@ -85,7 +85,7 @@ class _InstructorsPageState extends State<InstructorsPage> {
   List<Widget> _buildRows(List<Instructor> instructors) {
     return List.generate(
       (instructors.length / 2).ceil(),
-      (index) {
+          (index) {
         final start = index * 2;
         final end = (index * 2 + 2).clamp(0, instructors.length);
         return _buildRow(instructors.sublist(start, end));
@@ -97,77 +97,16 @@ class _InstructorsPageState extends State<InstructorsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: instructors.map((instructor) {
-        return InstructorCard(
-          imagePath: instructor.imagePath,
-          name: instructor.name,
+        return Expanded( // Wrap each InstructorCard with Expanded
+          child: InstructorCard(
+            imagePath: instructor.imageUrl,
+            name: instructor.name,
+            messageUrl: 'mailto:${instructor.email}',
+            phoneUrl: 'tel:${instructor.contact}', linkedInUrl: 's',
+            nepaliName: instructor.nepaliName
+          ),
         );
       }).toList(),
-    );
-  }
-}
-
-class Instructor {
-  final String imagePath;
-  final String name;
-
-  const Instructor({
-    required this.imagePath,
-    required this.name,
-  });
-}
-
-class InstructorCard extends StatelessWidget {
-  final String imagePath;
-  final String name;
-
-  const InstructorCard({
-    Key? key,
-    required this.imagePath,
-    required this.name,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-            width: 100,
-            height: 100,
-          ),
-          SizedBox(height: 10),
-          Text(
-            name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-          SizedBox(height: 10),
-          IconRow(),
-          Padding(padding: EdgeInsets.only(bottom: 20)),
-        ],
-      ),
-    );
-  }
-}
-
-class IconRow extends StatelessWidget {
-  const IconRow({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset("assets/images/instructors/icons/1.png"),
-        SizedBox(width: 10),
-        Image.asset("assets/images/instructors/icons/2.png"),
-        SizedBox(width: 10),
-        Image.asset("assets/images/instructors/icons/3.png"),
-      ],
     );
   }
 }
